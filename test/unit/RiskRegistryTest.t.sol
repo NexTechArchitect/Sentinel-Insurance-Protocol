@@ -70,12 +70,11 @@ contract RiskRegistryTest is Test {
     }
 
     function test_BlacklistWorksEvenWhenPaused() public {
-        // Setup: Register first, then pause
+       
         registry.registerProtocol(mockProtocol, "Aave", 10, true, 10000e6);
         registry.pause();
 
-        // Action: Blacklist should still work as an emergency escape hatch
-        registry.blacklistProtocol(mockProtocol);
+         registry.blacklistProtocol(mockProtocol);
 
         // Assert
         assertFalse(registry.isEligibleForCoverage(mockProtocol));
@@ -91,18 +90,17 @@ contract RiskRegistryTest is Test {
     }
 
     function test_RevertIf_RiskScoreOutOfBounds() public {
-        // Score 101 should revert
+       
         vm.expectRevert(abi.encodeWithSelector(IRiskRegistry.IRiskRegistry__InvalidRiskScore.selector, 101));
         registry.registerProtocol(mockProtocol, "HighRisk", 101, true, 1000);
         
-        // Update score 101 should revert
+    
         registry.registerProtocol(mockProtocol, "HighRisk", 50, true, 1000);
         vm.expectRevert(abi.encodeWithSelector(IRiskRegistry.IRiskRegistry__InvalidRiskScore.selector, 101));
         registry.updateRiskScore(mockProtocol, 101);
     }
 
     function test_ScoreExactly100IsValid() public {
-        // Boundary check: 100 is the max valid score
         registry.registerProtocol(mockProtocol, "MaxRisk", 100, false, 500e6);
         assertEq(registry.getRiskScore(mockProtocol), 100);
     }

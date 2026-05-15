@@ -32,7 +32,6 @@ contract FuzzVaultTest is Test {
         usdc.approve(address(pool), type(uint256).max);
     }
 
-    // FUZZ 1: Deposit and Share Math. Ensures precision loss doesn't lock funds.
     function testFuzz_DepositWithdrawMathPrecision(uint256 depositAmount) public {
         // Bound to realistic USDC amounts: $1 to $100 Million
         depositAmount = bound(depositAmount, 1e6, 100_000_000e6);

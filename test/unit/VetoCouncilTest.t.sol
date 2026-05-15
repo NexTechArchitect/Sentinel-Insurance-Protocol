@@ -10,7 +10,7 @@ pragma solidity ^0.8.24;
  */
 
 import {Test} from "forge-std/Test.sol";
-import {VetoCouncil} from "../../src/governance/VetoCouncil.sol"; // Update path if needed
+import {VetoCouncil} from "../../src/governance/VetoCouncil.sol"; 
 import {IClaimsGovernor} from "../../src/interfaces/IClaimsGovernor.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -33,7 +33,6 @@ contract VetoCouncilTest is Test {
         initialGuardians.push(g2);
         initialGuardians.push(g3);
 
-        // Deploy a 2-of-3 Veto Council
         council = new VetoCouncil(mockGovernor, initialGuardians, 2);
     }
 
@@ -116,15 +115,13 @@ contract VetoCouncilTest is Test {
         
         assertEq(council.vetoSignatureCount(claimId), 1);
         assertTrue(council.hasSignedVeto(claimId, g1));
-        assertFalse(council.isVetoExecuted(claimId)); // Not executed yet
-
-        // Guardian 2 signs -> Count = 2 -> Should Execute!
+        assertFalse(council.isVetoExecuted(claimId)); 
         vm.prank(g2);
         council.signVeto(claimId, reason);
 
         assertEq(council.vetoSignatureCount(claimId), 2);
         assertTrue(council.hasSignedVeto(claimId, g2));
-        assertTrue(council.isVetoExecuted(claimId)); // Execution triggered
+        assertTrue(council.isVetoExecuted(claimId)); 
     }
 
     function test_RevertIf_SignAfterExecution() public {
@@ -137,9 +134,7 @@ contract VetoCouncilTest is Test {
         council.signVeto(claimId, reason);
 
         vm.prank(g2);
-        council.signVeto(claimId, reason); // Executed here
-
-        // Guardian 3 tries to be smart and sign an already executed veto
+        council.signVeto(claimId, reason); 
         vm.prank(g3);
         vm.expectRevert(abi.encodeWithSelector(VetoCouncil.VetoCouncil__AlreadyExecuted.selector, claimId));
         council.signVeto(claimId, reason);
@@ -177,14 +172,11 @@ contract VetoCouncilTest is Test {
     }
 
     function test_RevertIf_RemoveBreaksThreshold() public {
-        // Threshold is 2, Current Guardians = 3. 
-        // Removing 1 leaves 2 (Threshold met).
-        // Removing another leaves 1. But threshold is 2! Contract must block this.
-        
-        council.removeGuardian(g3); // Works. Guardians = 2.
+      
+        council.removeGuardian(g3); 
 
         vm.expectRevert(abi.encodeWithSelector(VetoCouncil.VetoCouncil__InvalidThreshold.selector, 2, 1));
-        council.removeGuardian(g2); // Reverts! Math protects the multisig.
+        council.removeGuardian(g2); 
     }
 
     function test_SetThreshold_SuccessAndReverts() public {

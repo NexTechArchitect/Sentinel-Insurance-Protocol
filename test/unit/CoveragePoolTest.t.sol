@@ -234,12 +234,12 @@ function test_RevertIf_WithdrawCutsIntoLockedLiquidity() public {
         vm.startPrank(lpUser);
         vm.expectRevert(Pausable.EnforcedPause.selector);
         pool.deposit(1_000e6);
-        vm.stopPrank(); // <-- Yahan prank stop karna zaroori tha
+        vm.stopPrank();
 
-        pool.unpause(); // Called as test owner
+        pool.unpause(); 
 
         vm.startPrank(lpUser);
-        pool.deposit(1_000e6); // Now it works perfectly
+        pool.deposit(1_000e6);
         vm.stopPrank();
     }
 
@@ -262,17 +262,17 @@ function test_RevertIf_WithdrawCutsIntoLockedLiquidity() public {
 
     function test_ReleaseCoverage_EarlyReturnIfZero() public {
         vm.prank(policyEngine);
-        pool.releaseCoverage(999); // Unlocked policy -> returns instantly
+        pool.releaseCoverage(999);
     }
 
     function test_CollectPremium_EarlyReturnIfZero() public {
         vm.prank(policyEngine);
-        pool.collectPremium(1, 0); // Amount 0 -> returns instantly
+        pool.collectPremium(1, 0); 
     }
 
     function test_RefundPremium_EarlyReturnIfZero() public {
         vm.prank(policyEngine);
-        pool.refundPremium(lpUser, 0); // Amount 0 -> returns instantly
+        pool.refundPremium(lpUser, 0);
     }
 
     function test_RevertIf_ZeroAddressOnTransfers() public {

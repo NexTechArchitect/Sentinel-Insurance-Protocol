@@ -77,7 +77,7 @@ contract ProtocolHandler is Test {
         executor  = _executor;
         shield    = _shield;
         usdc      = _usdc;
-        testOwner = msg.sender; // InvariantsTest is the owner
+        testOwner = msg.sender; 
 
         users.push(address(0x111));
         users.push(address(0x222));
@@ -217,9 +217,6 @@ contract ProtocolHandler is Test {
         if (block.timestamp >= p.expiresAt) return;
         if (governor.claimForPolicy(policyId) != 0) return;
 
-        // Mint SHIELD and delegate BEFORE filing claim
-        // snapshotBlock = block.number - 1 at claim time
-        // So tokens must exist at block.number - 1
         address voter = address(0x999);
         uint256 voteWeight = shield.MAX_SUPPLY() / 10;
 

@@ -132,7 +132,6 @@ contract PolicyEngineTest is Test {
     }
 
     function test_BuyPolicy_Success() public {
-        // FIX: The actual computed premium based on the trace log
         uint256 expectedPremium = 32876712; 
         uint256 balanceBefore = usdc.balanceOf(user);
         
@@ -172,7 +171,6 @@ contract PolicyEngineTest is Test {
     }
 
     function test_CancelPolicy_NoGovernorSet() public {
-        // FIX: Deploy a completely fresh NFT to avoid the "already set" state lock
         PolicyNFT freshNft = new PolicyNFT();
         PolicyEngine freshEngine = new PolicyEngine(address(usdc), mockRegistry, mockPool, address(freshNft));
         
@@ -243,7 +241,7 @@ contract PolicyEngineTest is Test {
 
     function test_ClaimRefund_EmptyReturn() public {
         vm.prank(user);
-        engine.claimRefund(); // Should execute silently without reverting
+        engine.claimRefund();
     }
 
     function test_PauseUnpause_AdminControls() public {

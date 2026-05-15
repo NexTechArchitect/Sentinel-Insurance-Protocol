@@ -37,7 +37,6 @@ contract PayoutExecutorTest is Test {
     );
 
     function setUp() public {
-        // Deploy Executor with Mock Dependencies
         executor = new PayoutExecutor(
             mockGovernor,
             mockPolicyEngine,
@@ -120,10 +119,7 @@ contract PayoutExecutorTest is Test {
         // 1. Setup Mocks
         _mockClaim(claimId, policyId, IClaimsGovernor.ClaimStatus.APPROVED);
         _mockPolicy(policyId, policyHolder, amount);
-        _mockLockedCoverage(policyId, amount); // Locked exactly matches policy
-
-        // 2. Setup Expected Mock Interactions
-        // Executor should tell Governor to mark it EXECUTED
+        _mockLockedCoverage(policyId, amount); 
         vm.mockCall(
             mockGovernor,
             abi.encodeWithSelector(IClaimsGovernor.markExecuted.selector, claimId),

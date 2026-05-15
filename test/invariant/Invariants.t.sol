@@ -21,8 +21,6 @@ import {PolicyNFT}       from "../../src/token/PolicyNFT.sol";
 import {MockUSDC}        from "../mocks/MockUSDC.sol";
 import {MockAavePool}    from "../mocks/MockAavePool.sol";
 import {MockAToken}      from "../mocks/MockAToken.sol";
-
-// FIX 1: Missing Interfaces Imported Here
 import {IClaimsGovernor} from "../../src/interfaces/IClaimsGovernor.sol";
 import {IPolicyEngine}   from "../../src/interfaces/IPolicyEngine.sol";
 
@@ -80,7 +78,6 @@ contract InvariantsTest is Test {
             pool, engine, registry, governor, executor, shield, usdc
         );
 
-        // FIX: Hand over Shield Token ownership to Handler so it can mint votes during tests
         shield.transferOwnership(address(handler));
 
         targetContract(address(handler));
@@ -131,7 +128,6 @@ contract InvariantsTest is Test {
         uint256 pendingPayouts = 0;
         uint256 i = 0;
 
-        // FIX 2: Dynamic array parsing without crashing the compiler
         while (true) {
             try handler.approvedClaimIds(i) returns (uint256 claimId) {
                 IClaimsGovernor.Claim memory c = governor.getClaim(claimId);
@@ -141,7 +137,7 @@ contract InvariantsTest is Test {
                 }
                 i++;
             } catch {
-                break; // Reached the end of the array, exit loop cleanly
+                break;
             }
         }
 

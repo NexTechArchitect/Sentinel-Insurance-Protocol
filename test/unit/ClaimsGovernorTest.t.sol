@@ -68,8 +68,7 @@ contract ClaimsGovernorTest is Test {
 
         // Advance blocks to ensure getPastVotes snapshot is valid and established
         vm.roll(block.number + 10);
-        
-        // FIX: Advance time far into the future so `block.timestamp - 1 days` does not underflow
+        // Advance time to ensure we're past any potential timelocks or initial periods
         vm.warp(365 days);
 
         // 5. Setup PolicyEngine Mock (Happy Path Baseline)
@@ -99,7 +98,7 @@ contract ClaimsGovernorTest is Test {
     }
 
     function test_RevertIf_UnauthorizedExecutors() public {
-        _fileStandardClaim(); // claimId 1
+        _fileStandardClaim(); 
 
         vm.startPrank(hacker);
         
@@ -172,7 +171,6 @@ contract ClaimsGovernorTest is Test {
     function test_RevertIf_VoteWithNoPower() public {
         _fileStandardClaim();
 
-        // Hacker has no shield tokens
         vm.prank(hacker);
         vm.expectRevert(abi.encodeWithSelector(IClaimsGovernor.IClaimsGovernor__NoVotingPower.selector, hacker));
         governor.castVote(1, true);
@@ -181,7 +179,7 @@ contract ClaimsGovernorTest is Test {
     function test_RevertIf_VoteAfterDeadline() public {
         _fileStandardClaim();
         
-        vm.warp(block.timestamp + STANDARD_VOTING_PERIOD + 1); // Fast forward past deadline
+        vm.warp(block.timestamp + STANDARD_VOTING_PERIOD + 1);
 
         vm.prank(whaleVoter);
         vm.expectRevert(abi.encodeWithSelector(IClaimsGovernor.IClaimsGovernor__VotingWindowClosed.selector, 1));
@@ -192,12 +190,12 @@ contract ClaimsGovernorTest is Test {
         _fileStandardClaim();
 
         vm.startPrank(whaleVoter);
-        governor.castVote(1, true); // First vote succeeds
+        governor.castVote(1, true); 
         
         assertTrue(governor.hasVoted(1, whaleVoter));
 
         vm.expectRevert(abi.encodeWithSelector(IClaimsGovernor.IClaimsGovernor__AlreadyVoted.selector, 1, whaleVoter));
-        governor.castVote(1, true); // Second vote fails
+        governor.castVote(1, true); 
         vm.stopPrank();
     }
 
@@ -215,7 +213,6 @@ contract ClaimsGovernorTest is Test {
     function test_FinalizeClaim_ApprovedMajority() public {
         _fileStandardClaim();
 
-        // Whale votes YES (60%), Small votes NO (40%)
         vm.prank(whaleVoter);
         governor.castVote(1, true);
 
@@ -224,7 +221,6 @@ contract ClaimsGovernorTest is Test {
 
         vm.warp(block.timestamp + STANDARD_VOTING_PERIOD + 1);
 
-        // MOCK: PolicyEngine markClaimed should succeed
         vm.mockCall(mockPolicyEngine, abi.encodeWithSelector(IPolicyEngine.markClaimed.selector, 1), abi.encode());
 
         governor.finalizeClaim(1);
@@ -242,7 +238,6 @@ contract ClaimsGovernorTest is Test {
 
         vm.warp(block.timestamp + STANDARD_VOTING_PERIOD + 1);
 
-        // MOCK: CoveragePool releaseCoverage should succeed
         vm.mockCall(mockPool, abi.encodeWithSelector(ICoveragePool.releaseCoverage.selector, 1), abi.encode());
 
         governor.finalizeClaim(1);
@@ -351,7 +346,6 @@ contract ClaimsGovernorTest is Test {
     // --------------------------------------------------------
 
     function _fileStandardClaim() internal {
-        // Roll blocks so getPastVotes is valid for current block
         vm.roll(block.number + 5);
         
         vm.prank(policyHolder);

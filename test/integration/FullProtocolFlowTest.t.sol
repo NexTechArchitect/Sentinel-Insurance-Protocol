@@ -302,7 +302,6 @@ contract FullProtocolFlowTest is Test {
         uint256 duration = 30 days;
         
         vm.startPrank(DUST_ATTACKER);
-        // FIX: The error is in PolicyEngine contract
         vm.expectRevert(abi.encodeWithSelector(PolicyEngine.PolicyEngine__CoverageBelowMinimum.selector, dustCoverage, 100e6));
         engine.buyPolicy(TARGET_PROTOCOL, dustCoverage, duration);
         vm.stopPrank();
