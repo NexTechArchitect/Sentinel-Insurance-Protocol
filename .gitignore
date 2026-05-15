@@ -1,14 +1,17 @@
-# Compiler files
-cache/
+# Foundry Artifacts & Compiler Tracking
 out/
+cache/
 
-# Ignores development broadcast logs
-!/broadcast
-/broadcast/*/31337/
-/broadcast/**/dry-run/
+# Ignore ALL Deployment Broadcast Logs (Anvil, Sepolia, Mainnet)
+broadcast/
 
-# Docs
-docs/
+# Ignore Local Chain State Snapshot
+artifacts/
 
-# Dotenv file
+# System Dependencies & Packages
+node_modules/
+package-lock.json
+
+# Environment Variables & Private Credentials (CRITICAL)
 .env
+.env.*
