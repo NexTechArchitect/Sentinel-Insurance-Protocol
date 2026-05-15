@@ -1,25 +1,3 @@
-<<<<<<< HEAD
-<div align="center">
-
-<img src="https://img.shields.io/badge/🛡️-Sentinel_Insurance_Protocol-2563EB?style=for-the-badge&labelColor=0f172a&color=2563EB" height="36"/>
-
-# Decentralized On-Chain Insurance Infrastructure
-### Ethereum Sepolia · ERC-4626 Yield Routing · DAO Adjudication
-<br>
-
-[![License](https://img.shields.io/badge/License-MIT-22c55e?style=flat-square)](https://opensource.org/licenses/MIT)
-[![Foundry](https://img.shields.io/badge/Built_With-Foundry-F0B90B?style=flat-square)](https://book.getfoundry.sh/)
-[![Network](https://img.shields.io/badge/Network-Ethereum_Sepolia-627EEA?style=flat-square)](https://sepolia.etherscan.io/)
-[![Yield](https://img.shields.io/badge/Yield-Aave_V3-B6509E?style=flat-square)](https://aave.com/)
-[![Governance](https://img.shields.io/badge/Adjudication-Snapshot_Consensus-2563EB?style=flat-square)](#)
-
-<br>
-
-> **A highly modular, security-first DeFi insurance architecture.** > Token-weighted consensus adjudication, automated capital optimization via Aave V3, and flash-loan resistant governance voting.
-
-<br>
-
-=======
 
 <div align="center">
 
@@ -41,7 +19,6 @@
 
 <br>
 
->>>>>>> 9430a7e (test: refine and clean VetoCouncil security unit tests)
 <a href="https://github.com/NexTechArchitect/Sentinel-Insurance-Protocol">💻 Core Contracts</a> &nbsp;·&nbsp;
 <a href="https://sepolia.etherscan.io/address/0x2d55332a30047b6809F5236c340abD35FE9AA645">🔗 PolicyEngine</a> &nbsp;·&nbsp;
 <a href="https://faucet.circle.com/">🚰 Get Testnet USDC</a>
@@ -213,8 +190,4 @@ make deploy-sepolia
 
 **Architected & Engineered by [NexTech Architect**](https://github.com/NexTechArchitect)
 
-<<<<<<< HEAD
 *Smart Contract Engineer · DeFi Architecture · Formal Verification*
-=======
-*Smart Contract Engineer · DeFi Architecture · Formal Verification*
->>>>>>> 9430a7e (test: refine and clean VetoCouncil security unit tests)
