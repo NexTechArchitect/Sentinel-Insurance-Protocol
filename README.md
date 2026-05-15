@@ -1,4 +1,3 @@
-
 <div align="center">
 
 <img src="https://img.shields.io/badge/🛡️-Sentinel_Insurance_Protocol-2563EB?style=for-the-badge&labelColor=0f172a&color=2563EB" height="36"/>
@@ -43,11 +42,11 @@ Most decentralized insurance protocols suffer from idle capital inefficiency and
 
 ## 📑 Table of Contents
 
-1. [🏛️ Protocol Architecture](#protocol-architecture)
-2. [✅ Deployed Infrastructure](#deployed-infrastructure)
-3. [🧩 Contract Reference](#contract-reference)
-4. [🛡️ Security & Audit Profile](#security--audit-profile)
-5. [🛠️ Local Setup & Automation](#local-setup--automation)
+1. [🏛️ Protocol Architecture](#-protocol-architecture)
+2. [✅ Deployed Infrastructure](#-deployed-infrastructure)
+3. [🧩 Contract Reference](#-contract-reference)
+4. [🛡️ Security & Audit Profile](#-security--audit-profile)
+5. [🛠️ Local Setup & Automation](#-local-setup--automation)
 
 ---
 
