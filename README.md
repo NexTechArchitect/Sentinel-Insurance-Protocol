@@ -1,3 +1,4 @@
+
 <div align="center">
 
 <img src="https://img.shields.io/badge/🛡️-Sentinel_Insurance_Protocol-2563EB?style=for-the-badge&labelColor=0f172a&color=2563EB" height="36"/>
@@ -42,15 +43,15 @@ Most decentralized insurance protocols suffer from idle capital inefficiency and
 
 ## 📑 Table of Contents
 
-1. [🏛️ Protocol Architecture](#architecture)
-2. [✅ Deployed Infrastructure](#deployed)
-3. [🧩 Contract Reference](#contracts)
-4. [🛡️ Security & Audit Profile](#security)
-5. [🛠️ Local Setup & Automation](#setup)
+1. [🏛️ Protocol Architecture](#protocol-architecture)
+2. [✅ Deployed Infrastructure](#deployed-infrastructure)
+3. [🧩 Contract Reference](#contract-reference)
+4. [🛡️ Security & Audit Profile](#security--audit-profile)
+5. [🛠️ Local Setup & Automation](#local-setup--automation)
 
 ---
 
-## <a name="architecture"></a>🏛️ Protocol Architecture
+## 🏛️ Protocol Architecture
 
 The system operates across three isolated execution layers: Underwriting, Policy Routing, and Adjudication. A failure in governance voting cannot drain the underlying capital vault.
 
