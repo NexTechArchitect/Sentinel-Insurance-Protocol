@@ -53,7 +53,6 @@ contract FuzzVaultTest is Test {
         vm.stopPrank();
     }
 
-    // FUZZ 2: Liquidity Lock Exploit check. Try to lock more than free liquidity.
     function testFuzz_RevertIf_LockExceedsFreeLiquidity(uint256 depositAmount, uint256 lockAmount) public {
         depositAmount = bound(depositAmount, 1e6, 1_000_000e6); // Max 1M deposit
         lockAmount = bound(lockAmount, depositAmount + 1, type(uint256).max); // Lock ALWAYS greater than deposit
