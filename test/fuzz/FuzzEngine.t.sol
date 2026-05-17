@@ -37,7 +37,6 @@ contract FuzzEngineTest is Test {
         vm.mockCall(mockPool, abi.encodeWithSignature("lockCoverage(uint256,address,uint256)"), abi.encode());
     }
 
-    // FUZZ 1: Math Overflow Check. Ensures PremiumMath never panics on valid bounds.
     function testFuzz_PremiumMathNeverOverflows(uint256 coverageAmount, uint256 duration) public view {
         // Bound inputs to valid protocol limits
         coverageAmount = bound(coverageAmount, 100e6, 1_000_000e6);
@@ -50,7 +49,6 @@ contract FuzzEngineTest is Test {
         assertTrue(premium > 0, "Bug: Premium math returned zero");
     }
 
-    // FUZZ 2: Break the Boundaries. Throw extreme invalid data and expect STRICT reverts.
     function testFuzz_RevertIf_BuyPolicyInvalidBoundaries(uint256 badCoverage, uint256 badDuration) public {
         // Assume inputs are strictly OUTSIDE valid bounds
         vm.assume(
