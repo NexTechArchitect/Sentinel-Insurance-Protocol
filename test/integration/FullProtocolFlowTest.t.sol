@@ -112,7 +112,6 @@ contract FullProtocolFlowTest is Test {
         vm.stopPrank();
     }
 
-    // --- PHASE 1 TESTS ---
 
     function test_Chaos_LiquidityCrunch_And_BankRun() public {
         vm.startPrank(LP_WHALE_1);
@@ -251,7 +250,6 @@ contract FullProtocolFlowTest is Test {
         vm.stopPrank();
     }
 
-    // --- PHASE 2 & 3 TESTS (DEEP EVM) ---
 
     function test_Security_SameBlockFlashMintAndClaim() public {
         _setupBasicLiquidityAndPolicy(HACKER_BOB, 100_000e6);
