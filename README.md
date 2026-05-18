@@ -13,7 +13,7 @@
 [![Yield](https://img.shields.io/badge/Yield-Aave_V3-B6509E?style=flat-square)](https://aave.com/)
 [![Governance](https://img.shields.io/badge/Adjudication-Snapshot_Consensus-2563EB?style=flat-square)](#)
 
-<br>
+<br> 
 
 > **A highly modular, security-first DeFi insurance architecture.** > Token-weighted consensus adjudication, automated capital optimization via Aave V3, and flash-loan resistant governance voting.
 
