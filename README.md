@@ -11,7 +11,7 @@
 [![Foundry](https://img.shields.io/badge/Built_With-Foundry-F0B90B?style=flat-square)](https://book.getfoundry.sh/)
 [![Network](https://img.shields.io/badge/Network-Ethereum_Sepolia-627EEA?style=flat-square)](https://sepolia.etherscan.io/)
 [![Yield](https://img.shields.io/badge/Yield-Aave_V3-B6509E?style=flat-square)](https://aave.com/)
-[![Governance](https://img.shields.io/badge/Adjudication-Snapshot_Consensus-2563EB?style=flat-square)](#)
+[![Governance](https://img.shields.io/badge/Adjudication-Snapshot_Consensus-2563EB?style=flat-square)](#) 
 
 <br> 
 
