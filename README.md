@@ -1,8 +1,4 @@
-Bhai, samajh gaya. Upar ka launch link ekdum center aur bold kar diya hai taaki koi repo khole toh seedha live app par click maar sake. Aur ending ko ekdum sleek, professional, aur Web3-native vibe de di hai, bina length badhaye.
 
-Ye le tera final polished `README.md`. Copy maar aur push kar de:
-
-```markdown
 <div align="center">
 
 <img src="https://img.shields.io/badge/🛡️-Sentinel_Insurance_Protocol-2563EB?style=for-the-badge&labelColor=0f172a&color=2563EB" height="36"/>
