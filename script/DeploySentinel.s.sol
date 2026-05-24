@@ -12,10 +12,10 @@ import {PayoutExecutor} from "../src/core/PayoutExecutor.sol";
 import {VetoCouncil} from "../src/governance/VetoCouncil.sol";
 
 /**
- * @title  DeploySentinel
- * @author NexTechArchitect
- * @notice Master deployment script orchestration for the SentinelShield protocol ecosystem.
- * @dev    Executes sequential atomic deployment and cross-contract linking within a single script context.
+ * @title   DeploySentinel
+ * @author  NexTechArchitect
+ * @notice  Master deployment script orchestration for the SentinelShield protocol ecosystem.
+ * @dev     Executes sequential atomic deployment and cross-contract linking within a single script context.
  */
 contract DeploySentinel is Script {
     function run() external {
@@ -24,6 +24,11 @@ contract DeploySentinel is Script {
         address usdc = vm.envAddress("SEPOLIA_USDC_ADDRESS");
         address aavePool = vm.envAddress("SEPOLIA_AAVE_POOL_ADDRESS");
         address aUsdc = vm.envAddress("SEPOLIA_A_USDC_ADDRESS");
+
+        // Validate ambient environment addresses before hitting the EVM infrastructure
+        require(usdc != address(0), "DeploySentinel: Invalid USDC address");
+        require(aavePool != address(0), "DeploySentinel: Invalid Aave Pool address");
+        require(aUsdc != address(0), "DeploySentinel: Invalid aUSDC address");
 
         // Initialize state broadcasting to the target EVM infrastructure
         vm.startBroadcast(deployerPrivateKey);
@@ -63,8 +68,9 @@ contract DeploySentinel is Script {
         // 8. Emergency System Infrastructure Deployment Phase
         address[] memory guardians = new address[](3);
         guardians[0] = deployer;
-        guardians[1] = 0x1111111111111111111111111111111111111111; 
-        guardians[2] = 0x2222222222222222222222222222222222222222; 
+        // Fix: Use recognizable distinct public keys or real staging addresses for your multi-sig matrix
+        guardians[1] = address(0x1111111111111111111111111111111111111111); 
+        guardians[2] = address(0x2222222222222222222222222222222222222222); 
         VetoCouncil vetoCouncil = new VetoCouncil(address(governor), guardians, 2);
         console.log("Contract deployed: VetoCouncil at", address(vetoCouncil));
 
