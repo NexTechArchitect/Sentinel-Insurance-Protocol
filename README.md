@@ -235,9 +235,10 @@ npm run dev
 
 ---
 
+
 **SentinelShield Protocol** 
 
-
+<div align="center">
 
 
 *Engineered for the Decentralized Frontier.*
