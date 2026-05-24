@@ -100,9 +100,7 @@ function makeRingHaloTexture(): THREE.Texture {
   return new THREE.CanvasTexture(c);
 }
 
-// FIXED: Much higher resolution label texture with proper font rendering
 async function makeLabelTextureAsync(text: string, color: string): Promise<THREE.Texture> {
-  // Wait for fonts to be ready
   try { await document.fonts.ready; } catch { /* ignore */ }
 
   const W = 2048, H = 256;
@@ -112,14 +110,11 @@ async function makeLabelTextureAsync(text: string, color: string): Promise<THREE
   const ctx = canvas.getContext('2d')!;
   ctx.clearRect(0, 0, W, H);
 
-  // Font string — use system monospace as fallback for guaranteed availability
-  const fontStr =
-'900 96px "JetBrains Mono", monospace';
+  const fontStr = '900 96px "JetBrains Mono", monospace';
   ctx.font = fontStr;
   const metrics = ctx.measureText(text);
   const tw = metrics.width;
 
-  // Dark pill background for legibility
   const pillPad = 36;
   const pillH = 108, pillR = 16;
   const pillX = W / 2 - tw / 2 - pillPad;
@@ -139,12 +134,11 @@ async function makeLabelTextureAsync(text: string, color: string): Promise<THREE
   ctx.closePath();
   ctx.fillStyle = 'rgba(0,3,12,0.82)';
   ctx.fill();
-  // Subtle border matching the planet color
+  
   ctx.strokeStyle = color + '55';
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // Colored glow pass
   ctx.font = fontStr;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
@@ -152,24 +146,19 @@ async function makeLabelTextureAsync(text: string, color: string): Promise<THREE
   ctx.shadowBlur  = 8;
   ctx.fillStyle   = color;
   ctx.fillText(text, W / 2, H / 2 - 2);
-  // Second crisp pass — no shadow
+  
   ctx.shadowBlur  = 0;
   ctx.globalAlpha = 0.96;
   ctx.fillText(text, W / 2, H / 2 - 2);
   ctx.globalAlpha = 1.0;
 
   const tex = new THREE.CanvasTexture(canvas);
-
-tex.minFilter = THREE.LinearFilter;
-tex.magFilter = THREE.LinearFilter;
-
-tex.generateMipmaps = false;
-
-tex.anisotropy = 16;
-
-tex.needsUpdate = true;
-
-return tex;
+  tex.minFilter = THREE.LinearFilter;
+  tex.magFilter = THREE.LinearFilter;
+  tex.generateMipmaps = false;
+  tex.anisotropy = 16;
+  tex.needsUpdate = true;
+  return tex;
 }
 
 function rand(min: number, max: number) { return min + Math.random() * (max - min); }
@@ -187,10 +176,7 @@ function CinematicScene() {
 
     let cancelled = false;
 
-    // ── Renderer ─────────────────────────────────────────────────────────────
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true, alpha: true, powerPreference: 'high-performance',
-    });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
     renderer.setClearColor(0x000000, 0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio ?? 1, 2.5));
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -199,7 +185,6 @@ function CinematicScene() {
     renderer.toneMappingExposure = 1.22;
     mount.appendChild(renderer.domElement);
 
-    // ── Scene / Camera ────────────────────────────────────────────────────────
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x010208, 0.00082);
 
@@ -207,47 +192,31 @@ function CinematicScene() {
     camera.position.set(-30, 100, 790);
     camera.lookAt(0, 0, 0);
 
-    // ── Lights ────────────────────────────────────────────────────────────────
     scene.add(new THREE.AmbientLight(0x1a2840, 1.5));
-    const keyLight  = new THREE.PointLight(0x58daff, 8,  1400);
-    keyLight.position.set(-80, 60, 120);
-    scene.add(keyLight);
-    const fillLight = new THREE.PointLight(0xc484ff, 5,  1000);
-    fillLight.position.set(160, -40, 80);
-    scene.add(fillLight);
-    const rimLight  = new THREE.PointLight(0xffc676, 3,  800);
-    rimLight.position.set(0, -130, -300);
-    scene.add(rimLight);
-    // Extra strong light on Saturn center so the sphere is clearly visible
-    const saturnLight = new THREE.PointLight(0x88ccff, 6, 300);
-    saturnLight.position.set(-60, 80, 150);
-    scene.add(saturnLight);
+    const keyLight  = new THREE.PointLight(0x58daff, 8,  1400); keyLight.position.set(-80, 60, 120); scene.add(keyLight);
+    const fillLight = new THREE.PointLight(0xc484ff, 5,  1000); fillLight.position.set(160, -40, 80); scene.add(fillLight);
+    const rimLight  = new THREE.PointLight(0xffc676, 3,  800);  rimLight.position.set(0, -130, -300); scene.add(rimLight);
+    const saturnLight = new THREE.PointLight(0x88ccff, 6, 300); saturnLight.position.set(-60, 80, 150); scene.add(saturnLight);
 
-    // ── Root group ────────────────────────────────────────────────────────────
     const root = new THREE.Group();
     root.position.x = window.innerWidth < 860 ? 0 : -155;
     scene.add(root);
 
-    // Pre-build shared textures
     const textures: THREE.Texture[] = [];
     const glowTex   = makeGlowTexture(256, 1.0);   textures.push(glowTex);
     const softTex   = makeGlowTexture(256, 0.50);  textures.push(softTex);
     const wideTex   = makeGlowTexture(256, 0.22);  textures.push(wideTex);
-    const ringTex   = makeRingHaloTexture();         textures.push(ringTex);
+    const ringTex   = makeRingHaloTexture();       textures.push(ringTex);
 
-    // ════════════════════════════════════════════════════════════════════════
-    // 1.  MULTI-LAYER STAR FIELD
-    // ════════════════════════════════════════════════════════════════════════
+    // 1. STAR FIELD
     const starLayers = [
       { n: 3400, rMin: 650,  rMax: 2000, sz: 0.85, op: 0.60, spd: 0.00018 },
       { n: 1600, rMin: 320,  rMax: 720,  sz: 1.30, op: 0.40, spd: 0.00042 },
       { n:  620, rMin: 180,  rMax: 360,  sz: 2.00, op: 0.26, spd: 0.00085 },
     ];
     const starGroups: THREE.Points[] = [];
-    const sPalette = [
-      new THREE.Color('#58daff'), new THREE.Color('#c484ff'),
-      new THREE.Color('#b2c6ff'), new THREE.Color('#ffffff'),
-    ];
+    const sPalette = [ new THREE.Color('#58daff'), new THREE.Color('#c484ff'), new THREE.Color('#b2c6ff'), new THREE.Color('#ffffff') ];
+    
     starLayers.forEach(({ n, rMin, rMax, sz, op, spd }) => {
       const pos = new Float32Array(n * 3);
       const col = new Float32Array(n * 3);
@@ -274,19 +243,15 @@ function CinematicScene() {
       starGroups.push(pts);
     });
 
-    // ════════════════════════════════════════════════════════════════════════
-    // 2.  NEBULA CORE  — REMOVED particle dot cloud, replaced with clean Saturn
-    // ════════════════════════════════════════════════════════════════════════
+    // 2. NEBULA CORE
     const nebulaGroup = new THREE.Group();
     root.add(nebulaGroup);
 
-    // Only keep the outer DIFFUSE shell (far particles, no central dot cloud)
     {
       const n = 2400;
       const pos = new Float32Array(n * 3);
       const col = new Float32Array(n * 3);
       for (let i = 0; i < n; i++) {
-        // Start at r=80 minimum so no particles overlap the Saturn body
         const r     = 80 + Math.pow(Math.random(), 1.8) * 260;
         const theta = Math.random() * Math.PI * 2;
         const phi   = Math.acos(2 * Math.random() - 1);
@@ -305,72 +270,37 @@ function CinematicScene() {
       })));
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    // 3.  SATURN — Premium 3D body, clean visible sphere, detailed rings
-    // ════════════════════════════════════════════════════════════════════════
+    // 3. SATURN
     const saturnGroup = new THREE.Group();
     nebulaGroup.add(saturnGroup);
 
-    // --- Planet body: high-poly sphere with rich surface material ---
-    // Create a canvas texture for the planet surface (banded like Saturn)
     const surfaceCanvas = document.createElement('canvas');
     surfaceCanvas.width = 1024; surfaceCanvas.height = 512;
     const sCtx = surfaceCanvas.getContext('2d')!;
-    // Base gradient — deep blue-navy
     const baseGrad = sCtx.createLinearGradient(0, 0, 0, 512);
-    baseGrad.addColorStop(0.00, '#0d1f3a');
-    baseGrad.addColorStop(0.15, '#112444');
-    baseGrad.addColorStop(0.30, '#1a3a5e');
-    baseGrad.addColorStop(0.45, '#0f2d52');
-    baseGrad.addColorStop(0.55, '#112850');
-    baseGrad.addColorStop(0.70, '#1c3c5c');
-    baseGrad.addColorStop(0.85, '#0d2040');
-    baseGrad.addColorStop(1.00, '#09182e');
-    sCtx.fillStyle = baseGrad;
-    sCtx.fillRect(0, 0, 1024, 512);
-    // Add horizontal bands (like Saturn's atmosphere)
+    baseGrad.addColorStop(0.00, '#0d1f3a'); baseGrad.addColorStop(0.15, '#112444');
+    baseGrad.addColorStop(0.30, '#1a3a5e'); baseGrad.addColorStop(0.45, '#0f2d52');
+    baseGrad.addColorStop(0.55, '#112850'); baseGrad.addColorStop(0.70, '#1c3c5c');
+    baseGrad.addColorStop(0.85, '#0d2040'); baseGrad.addColorStop(1.00, '#09182e');
+    sCtx.fillStyle = baseGrad; sCtx.fillRect(0, 0, 1024, 512);
+    
     const bands = [
-      { y: 0.08, h: 0.04, col: 'rgba(88,218,255,0.18)' },
-      { y: 0.18, h: 0.06, col: 'rgba(44,130,200,0.22)' },
-      { y: 0.32, h: 0.08, col: 'rgba(30,100,180,0.14)' },
-      { y: 0.48, h: 0.04, col: 'rgba(88,218,255,0.12)' },
-      { y: 0.60, h: 0.07, col: 'rgba(60,160,220,0.18)' },
-      { y: 0.74, h: 0.05, col: 'rgba(40,120,190,0.16)' },
+      { y: 0.08, h: 0.04, col: 'rgba(88,218,255,0.18)' }, { y: 0.18, h: 0.06, col: 'rgba(44,130,200,0.22)' },
+      { y: 0.32, h: 0.08, col: 'rgba(30,100,180,0.14)' }, { y: 0.48, h: 0.04, col: 'rgba(88,218,255,0.12)' },
+      { y: 0.60, h: 0.07, col: 'rgba(60,160,220,0.18)' }, { y: 0.74, h: 0.05, col: 'rgba(40,120,190,0.16)' },
       { y: 0.88, h: 0.04, col: 'rgba(80,200,240,0.10)' },
     ];
-   bands.forEach(b => {
-  const g = sCtx.createLinearGradient(0,0,1024,0);
-
-  g.addColorStop(0, b.col);
-
-  g.addColorStop(
-    0.25,
-    b.col.replace(/[\d.]+\)$/, '0.10)')
-  );
-
-  g.addColorStop(0.5, b.col);
-
-  g.addColorStop(
-    0.75,
-    b.col.replace(/[\d.]+\)$/, '0.25)')
-  );
-
-  g.addColorStop(1, b.col);
-
-  sCtx.fillStyle = g;
-  sCtx.fillRect(
-    0,
-    b.y * 512,
-    1024,
-    b.h * 512
-  );
-});
-    // Polar glow
+    bands.forEach(b => {
+      const g = sCtx.createLinearGradient(0,0,1024,0);
+      g.addColorStop(0, b.col); g.addColorStop(0.25, b.col.replace(/[\d.]+\)$/, '0.10)'));
+      g.addColorStop(0.5, b.col); g.addColorStop(0.75, b.col.replace(/[\d.]+\)$/, '0.25)'));
+      g.addColorStop(1, b.col);
+      sCtx.fillStyle = g; sCtx.fillRect(0, b.y * 512, 1024, b.h * 512);
+    });
+    
     const polarGrad = sCtx.createRadialGradient(512, 0, 0, 512, 0, 200);
-    polarGrad.addColorStop(0, 'rgba(88,218,255,0.35)');
-    polarGrad.addColorStop(1, 'rgba(88,218,255,0)');
-    sCtx.fillStyle = polarGrad;
-    sCtx.fillRect(0, 0, 1024, 200);
+    polarGrad.addColorStop(0, 'rgba(88,218,255,0.35)'); polarGrad.addColorStop(1, 'rgba(88,218,255,0)');
+    sCtx.fillStyle = polarGrad; sCtx.fillRect(0, 0, 1024, 200);
 
     const surfaceTex = new THREE.CanvasTexture(surfaceCanvas);
     textures.push(surfaceTex);
@@ -378,127 +308,70 @@ function CinematicScene() {
     const saturnBody = new THREE.Mesh(
       new THREE.SphereGeometry(26, 128, 64),
       new THREE.MeshStandardMaterial({
-        map:               surfaceTex,
-        emissiveMap:       surfaceTex,
-        emissive:          new THREE.Color('#1a4a7a'),
-        emissiveIntensity: 0.45,
-        metalness:         0.05,
-        roughness:         0.62,
-      }),
+        map: surfaceTex, emissiveMap: surfaceTex, emissive: new THREE.Color('#1a4a7a'),
+        emissiveIntensity: 0.45, metalness: 0.05, roughness: 0.62,
+      })
     );
     saturnGroup.add(saturnBody);
 
-    // Atmospheric glow shell (outer, backside glow)
     const atmMat = new THREE.MeshStandardMaterial({
-      color:             new THREE.Color('#2a6aaa'),
-      emissive:          new THREE.Color('#58daff'),
-      emissiveIntensity: 0.50,
-      transparent:       true,
-      opacity:           0.22,
-      side:              THREE.BackSide,
+      color: new THREE.Color('#2a6aaa'), emissive: new THREE.Color('#58daff'),
+      emissiveIntensity: 0.50, transparent: true, opacity: 0.22, side: THREE.BackSide,
     });
-    const atmosphereMesh = new THREE.Mesh(new THREE.SphereGeometry(28.5, 64, 32), atmMat);
-    saturnGroup.add(atmosphereMesh);
+    saturnGroup.add(new THREE.Mesh(new THREE.SphereGeometry(28.5, 64, 32), atmMat));
 
-    // Subtle terminator shading on front face
-    const shadowShell = new THREE.Mesh(
+    saturnGroup.add(new THREE.Mesh(
       new THREE.SphereGeometry(26.1, 64, 32),
-      new THREE.MeshStandardMaterial({
-        color:       new THREE.Color('#000820'),
-        transparent: true,
-        opacity:     0.28,
-        side:        THREE.FrontSide,
-        depthWrite:  false,
-      }),
-    );
-    saturnGroup.add(shadowShell);
+      new THREE.MeshStandardMaterial({ color: new THREE.Color('#000820'), transparent: true, opacity: 0.28, side: THREE.FrontSide, depthWrite: false })
+    ));
 
-    // --- Ring system: 4 rings, each a proper mesh with canvas alpha texture ---
-    // Ring texture: radial gradient from transparent → opaque → transparent
-    const makeRingTex = (innerFrac: number, outerFrac: number, col: string, opacity: number): THREE.Texture => {
-      const rc = document.createElement('canvas');
-      rc.width = 512; rc.height = 1;
-      const rCtx = rc.getContext('2d')!;
-      const rg = rCtx.createLinearGradient(0, 0, 512, 0);
-      const c = new THREE.Color(col);
-      const r = Math.round(c.r * 255), g2 = Math.round(c.g * 255), b = Math.round(c.b * 255);
-      rg.addColorStop(0,           `rgba(${r},${g2},${b},0)`);
-      rg.addColorStop(innerFrac,   `rgba(${r},${g2},${b},0)`);
-      rg.addColorStop(innerFrac + 0.05, `rgba(${r},${g2},${b},${opacity})`);
-      rg.addColorStop(outerFrac - 0.05, `rgba(${r},${g2},${b},${opacity * 0.7})`);
-      rg.addColorStop(outerFrac,   `rgba(${r},${g2},${b},0)`);
-      rg.addColorStop(1,           `rgba(${r},${g2},${b},0)`);
-      rCtx.fillStyle = rg;
-      rCtx.fillRect(0, 0, 512, 1);
-      const t = new THREE.CanvasTexture(rc);
-      t.wrapS = THREE.RepeatWrapping;
-      textures.push(t);
-      return t;
+    const makeRingTex = (innerFrac: number, outerFrac: number, col: string, opacity: number) => {
+      const rc = document.createElement('canvas'); rc.width = 512; rc.height = 1;
+      const rCtx = rc.getContext('2d')!; const rg = rCtx.createLinearGradient(0, 0, 512, 0);
+      const c = new THREE.Color(col); const r = Math.round(c.r * 255), g2 = Math.round(c.g * 255), b = Math.round(c.b * 255);
+      rg.addColorStop(0, `rgba(${r},${g2},${b},0)`); rg.addColorStop(innerFrac, `rgba(${r},${g2},${b},0)`);
+      rg.addColorStop(innerFrac + 0.05, `rgba(${r},${g2},${b},${opacity})`); rg.addColorStop(outerFrac - 0.05, `rgba(${r},${g2},${b},${opacity * 0.7})`);
+      rg.addColorStop(outerFrac, `rgba(${r},${g2},${b},0)`); rg.addColorStop(1, `rgba(${r},${g2},${b},0)`);
+      rCtx.fillStyle = rg; rCtx.fillRect(0, 0, 512, 1);
+      const t = new THREE.CanvasTexture(rc); t.wrapS = THREE.RepeatWrapping; textures.push(t); return t;
     };
 
     const RING_TILT = 0.46;
     const ringDefs = [
-      { iR: 32,  oR: 46,  col: '#58daff', op: 0.55, iFrac: 0.0, oFrac: 1.0 },
-      { iR: 48,  oR: 65,  col: '#a0ccee', op: 0.48, iFrac: 0.0, oFrac: 1.0 },
-      { iR: 67,  oR: 80,  col: '#c484ff', op: 0.32, iFrac: 0.0, oFrac: 1.0 },
-      { iR: 82,  oR: 90,  col: '#b2c6ff', op: 0.18, iFrac: 0.0, oFrac: 1.0 },
+      { iR: 32, oR: 46, col: '#58daff', op: 0.55, iFrac: 0.0, oFrac: 1.0 },
+      { iR: 48, oR: 65, col: '#a0ccee', op: 0.48, iFrac: 0.0, oFrac: 1.0 },
+      { iR: 67, oR: 80, col: '#c484ff', op: 0.32, iFrac: 0.0, oFrac: 1.0 },
+      { iR: 82, oR: 90, col: '#b2c6ff', op: 0.18, iFrac: 0.0, oFrac: 1.0 },
     ];
 
     ringDefs.forEach(({ iR, oR, col, op, iFrac, oFrac }) => {
-      const segments = 256;
-      const verts: number[] = [];
-      const uvs:   number[] = [];
-      const idxs:  number[] = [];
+      const segments = 256; const verts: number[] = []; const uvs: number[] = []; const idxs: number[] = [];
       for (let i = 0; i <= segments; i++) {
-        const a = (i / segments) * Math.PI * 2;
-        const cos = Math.cos(a), sin = Math.sin(a);
+        const a = (i / segments) * Math.PI * 2; const cos = Math.cos(a), sin = Math.sin(a);
         verts.push(iR * cos, 0, iR * sin); uvs.push(iFrac, i / segments);
         verts.push(oR * cos, 0, oR * sin); uvs.push(oFrac, i / segments);
       }
-      for (let i = 0; i < segments; i++) {
-        const b = i * 2;
-        idxs.push(b, b+1, b+2, b+1, b+3, b+2);
-      }
+      for (let i = 0; i < segments; i++) { const b = i * 2; idxs.push(b, b+1, b+2, b+1, b+3, b+2); }
       const rGeo = new THREE.BufferGeometry();
       rGeo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
-      rGeo.setAttribute('uv',       new THREE.Float32BufferAttribute(uvs, 2));
-      rGeo.setIndex(idxs);
-      rGeo.computeVertexNormals();
+      rGeo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+      rGeo.setIndex(idxs); rGeo.computeVertexNormals();
       const ringTex2 = makeRingTex(iFrac, oFrac, col, op);
       const rMesh = new THREE.Mesh(rGeo, new THREE.MeshStandardMaterial({
-        map:         ringTex2,
-        alphaMap:    ringTex2,
-        emissive:    new THREE.Color(col),
-        emissiveIntensity: 0.30,
-        transparent: true,
-        opacity:     1.0,
-        side:        THREE.DoubleSide,
-        metalness:   0.0,
-        roughness:   0.8,
-        depthWrite:  false,
-        alphaTest:   0.01,
+        map: ringTex2, alphaMap: ringTex2, emissive: new THREE.Color(col), emissiveIntensity: 0.30,
+        transparent: true, opacity: 1.0, side: THREE.DoubleSide, metalness: 0.0, roughness: 0.8, depthWrite: false, alphaTest: 0.01,
       }));
-      rMesh.rotation.x = RING_TILT;
-      saturnGroup.add(rMesh);
+      rMesh.rotation.x = RING_TILT; saturnGroup.add(rMesh);
     });
 
-    // Wide soft corona behind the whole planet/ring system
     const coreHalo = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: wideTex, color: new THREE.Color('#3888cc'),
-      transparent: true, opacity: 0.22,
+      map: wideTex, color: new THREE.Color('#3888cc'), transparent: true, opacity: 0.22,
       blending: THREE.AdditiveBlending, depthWrite: false,
     }));
-    coreHalo.scale.set(320, 320, 1);
-    nebulaGroup.add(coreHalo);
+    coreHalo.scale.set(320, 320, 1); nebulaGroup.add(coreHalo);
 
-    // ════════════════════════════════════════════════════════════════════════
-    // 4.  AURORA FILAMENTS
-    // ════════════════════════════════════════════════════════════════════════
-    interface AuroraLayer {
-      pts:  THREE.Points;
-      buf:  Float32Array;
-      meta: Array<{ r: number; theta: number; y: number; phase: number; spd: number }>;
-    }
+    // 4. AURORA FILAMENTS
+    interface AuroraLayer { pts: THREE.Points; buf: Float32Array; meta: Array<{ r: number; theta: number; y: number; phase: number; spd: number }>; }
     const auroraLayers: AuroraLayer[] = [];
     const auroraSetup = [
       { n: 550, col: new THREE.Color('#58daff'), yRange: [-22, 22], rRange: [130, 340], sRange: [0.030, 0.070] },
@@ -508,301 +381,162 @@ function CinematicScene() {
     auroraSetup.forEach(({ n, col, yRange, rRange, sRange }) => {
       const buf  = new Float32Array(n * 3);
       const meta = Array.from({ length: n }, () => ({
-        r:     rand(rRange[0], rRange[1]),
-        theta: Math.random() * Math.PI * 2,
-        y:     rand(yRange[0], yRange[1]),
-        phase: Math.random() * Math.PI * 2,
-        spd:   rand(sRange[0], sRange[1]),
+        r: rand(rRange[0], rRange[1]), theta: Math.random() * Math.PI * 2, y: rand(yRange[0], yRange[1]),
+        phase: Math.random() * Math.PI * 2, spd: rand(sRange[0], sRange[1]),
       }));
       const geo = new THREE.BufferGeometry();
       geo.setAttribute('position', new THREE.BufferAttribute(buf, 3));
       const pts = new THREE.Points(geo, new THREE.PointsMaterial({
-        color: col, size: 1.85, transparent: true, opacity: 0.16,
-        blending: THREE.AdditiveBlending, depthWrite: false,
+        color: col, size: 1.85, transparent: true, opacity: 0.16, blending: THREE.AdditiveBlending, depthWrite: false,
       }));
-      root.add(pts);
-      auroraLayers.push({ pts, buf, meta });
+      root.add(pts); auroraLayers.push({ pts, buf, meta });
     });
 
-    // ════════════════════════════════════════════════════════════════════════
-    // 5.  PROTOCOL ORBS — async label textures loaded at high res
-    // ════════════════════════════════════════════════════════════════════════
+    // 5. PROTOCOL ORBS
     interface OrbState {
-      planet:   Planet;
-      core:     THREE.Sprite;
-      mid:      THREE.Sprite;
-      halo:     THREE.Sprite;
-      ring:     THREE.Sprite;
-      label:    THREE.Sprite;
-      trailBuf: Float32Array;
-      trailGeo: THREE.BufferGeometry;
-      trailPts: THREE.Vector3[];
+      planet: Planet; core: THREE.Sprite; mid: THREE.Sprite; halo: THREE.Sprite; ring: THREE.Sprite; label: THREE.Sprite;
+      trailBuf: Float32Array; trailGeo: THREE.BufferGeometry; trailPts: THREE.Vector3[];
     }
 
     const orbLights: THREE.PointLight[] = PLANETS.slice(0, 4).map(p => {
-      const pl = new THREE.PointLight(new THREE.Color(p.color), 2.2, 190);
-      root.add(pl);
-      return pl;
+      const pl = new THREE.PointLight(new THREE.Color(p.color), 2.2, 190); root.add(pl); return pl;
     });
 
     const TRAIL_MAX = 55;
-
-    // Build orb states synchronously first (with placeholder label), then upgrade labels async
     const orbStates: OrbState[] = PLANETS.map((planet) => {
       const col = new THREE.Color(planet.color);
+      const core = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: col, transparent: true, opacity: 0.96, blending: THREE.AdditiveBlending, depthWrite: false }));
+      core.scale.set(planet.radius * 2.8, planet.radius * 2.8, 1); root.add(core);
 
-      const core = new THREE.Sprite(new THREE.SpriteMaterial({
-        map: glowTex, color: col,
-        transparent: true, opacity: 0.96,
-        blending: THREE.AdditiveBlending, depthWrite: false,
-      }));
-      const cs = planet.radius * 2.8;
-      core.scale.set(cs, cs, 1);
-      root.add(core);
+      const mid = new THREE.Sprite(new THREE.SpriteMaterial({ map: softTex, color: col, transparent: true, opacity: 0.38, blending: THREE.AdditiveBlending, depthWrite: false }));
+      mid.scale.set(planet.radius * 10, planet.radius * 10, 1); root.add(mid);
 
-      const mid = new THREE.Sprite(new THREE.SpriteMaterial({
-        map: softTex, color: col,
-        transparent: true, opacity: 0.38,
-        blending: THREE.AdditiveBlending, depthWrite: false,
-      }));
-      mid.scale.set(planet.radius * 10, planet.radius * 10, 1);
-      root.add(mid);
+      const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: wideTex, color: col, transparent: true, opacity: 0.11, blending: THREE.AdditiveBlending, depthWrite: false }));
+      halo.scale.set(planet.radius * 26, planet.radius * 26, 1); root.add(halo);
 
-      const halo = new THREE.Sprite(new THREE.SpriteMaterial({
-        map: wideTex, color: col,
-        transparent: true, opacity: 0.11,
-        blending: THREE.AdditiveBlending, depthWrite: false,
-      }));
-      halo.scale.set(planet.radius * 26, planet.radius * 26, 1);
-      root.add(halo);
+      const ring = new THREE.Sprite(new THREE.SpriteMaterial({ map: ringTex, color: col, transparent: true, opacity: 0.20, blending: THREE.AdditiveBlending, depthWrite: false, rotation: Math.random() * Math.PI }));
+      ring.scale.set(planet.radius * 15, planet.radius * 15, 1); root.add(ring);
 
-      const ring = new THREE.Sprite(new THREE.SpriteMaterial({
-        map: ringTex, color: col,
-        transparent: true, opacity: 0.20,
-        blending: THREE.AdditiveBlending, depthWrite: false,
-        rotation: Math.random() * Math.PI,
-      }));
-      ring.scale.set(planet.radius * 15, planet.radius * 15, 1);
-      root.add(ring);
+      const label = new THREE.Sprite(new THREE.SpriteMaterial({ transparent:true, opacity:0, depthWrite:false, depthTest:false, blending:THREE.NormalBlending }));
+      label.scale.set(95,12,1); root.add(label);
 
-      // Placeholder label (blank, will be replaced async)
-     const label = new THREE.Sprite(
-    new THREE.SpriteMaterial({
-    transparent:true,
-   opacity:0,
-   depthWrite:false,
-   depthTest:false,   // important
-   blending:THREE.NormalBlending,
- })
-
-);
-      // 2048×256 aspect ratio → display at 160×20 world units
-      label.scale.set(95,12,1);
-      root.add(label);
-
-      // Trail
       const trailBuf = new Float32Array(TRAIL_MAX * 3);
       const trailGeo = new THREE.BufferGeometry();
       trailGeo.setAttribute('position', new THREE.BufferAttribute(trailBuf, 3));
-      root.add(new THREE.Points(trailGeo, new THREE.PointsMaterial({
-        color: col, size: 1.6, transparent: true, opacity: 0.09,
-        blending: THREE.AdditiveBlending, depthWrite: false,
-      })));
+      root.add(new THREE.Points(trailGeo, new THREE.PointsMaterial({ color: col, size: 1.6, transparent: true, opacity: 0.09, blending: THREE.AdditiveBlending, depthWrite: false })));
 
       return { planet, core, mid, halo, ring, label, trailBuf, trailGeo, trailPts: [] };
     });
 
-    // Load label textures asynchronously at high resolution
     PLANETS.forEach((planet, idx) => {
       makeLabelTextureAsync(planet.name, planet.color).then(lTex => {
         if (cancelled) { lTex.dispose(); return; }
         textures.push(lTex);
         const mat = orbStates[idx].label.material as THREE.SpriteMaterial;
-        mat.map     = lTex;
-        mat.opacity = 0.88;
-        mat.needsUpdate = true;
+        mat.map = lTex; mat.opacity = 0.88; mat.needsUpdate = true;
       });
     });
 
-    // ════════════════════════════════════════════════════════════════════════
-    // 6.  ORBIT DUST HALOS
-    // ════════════════════════════════════════════════════════════════════════
+    // 6. ORBIT DUST HALOS
     PLANETS.forEach((p) => {
-      const n   = 300;
-      const pos = new Float32Array(n * 3);
+      const n = 300; const pos = new Float32Array(n * 3);
       for (let i = 0; i < n; i++) {
         const angle = (i / n) * Math.PI * 2 + rand(-0.05, 0.05);
-        const r     = p.orbit + rand(-5, 5);
-        const xO    = r * Math.cos(angle);
-        const zO    = r * Math.sin(angle);
-        const cosI  = Math.cos(p.inc), sinI = Math.sin(p.inc);
-        const cosL  = Math.cos(p.lan), sinL = Math.sin(p.lan);
-        pos[i*3]   = cosL * xO - sinL * zO * cosI + rand(-2, 2);
-        pos[i*3+1] = zO * sinI + rand(-1.5, 1.5);
-        pos[i*3+2] = sinL * xO + cosL * zO * cosI + rand(-2, 2);
+        const r = p.orbit + rand(-5, 5);
+        const xO = r * Math.cos(angle); const zO = r * Math.sin(angle);
+        const cosI = Math.cos(p.inc), sinI = Math.sin(p.inc); const cosL = Math.cos(p.lan), sinL = Math.sin(p.lan);
+        pos[i*3] = cosL * xO - sinL * zO * cosI + rand(-2, 2); pos[i*3+1] = zO * sinI + rand(-1.5, 1.5); pos[i*3+2] = sinL * xO + cosL * zO * cosI + rand(-2, 2);
       }
-      const geo = new THREE.BufferGeometry();
-      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-      root.add(new THREE.Points(geo, new THREE.PointsMaterial({
-        color: new THREE.Color(p.color), size: 0.65, transparent: true, opacity: 0.032,
-        blending: THREE.AdditiveBlending, depthWrite: false,
-      })));
+      const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      root.add(new THREE.Points(geo, new THREE.PointsMaterial({ color: new THREE.Color(p.color), size: 0.65, transparent: true, opacity: 0.032, blending: THREE.AdditiveBlending, depthWrite: false })));
     });
 
-    // ════════════════════════════════════════════════════════════════════════
-    // 7.  AMBIENT DUST VEIL
-    // ════════════════════════════════════════════════════════════════════════
+    // 7. AMBIENT DUST VEIL
     {
-      const n   = 5500;
-      const pos = new Float32Array(n * 3);
-      const col = new Float32Array(n * 3);
+      const n = 5500; const pos = new Float32Array(n * 3); const col = new Float32Array(n * 3);
       for (let i = 0; i < n; i++) {
-        const r     = rand(260, 1300);
-        const theta = Math.random() * Math.PI * 2;
-        const phi   = Math.acos(2 * Math.random() - 1);
-        pos[i*3]   = r * Math.sin(phi) * Math.cos(theta);
-        pos[i*3+1] = r * Math.cos(phi) * 0.36;
-        pos[i*3+2] = r * Math.sin(phi) * Math.sin(theta);
+        const r = rand(260, 1300); const theta = Math.random() * Math.PI * 2; const phi = Math.acos(2 * Math.random() - 1);
+        pos[i*3] = r * Math.sin(phi) * Math.cos(theta); pos[i*3+1] = r * Math.cos(phi) * 0.36; pos[i*3+2] = r * Math.sin(phi) * Math.sin(theta);
         const c = Math.random() < 0.55 ? new THREE.Color('#58daff') : new THREE.Color('#c484ff');
         col[i*3] = c.r * 0.38; col[i*3+1] = c.g * 0.38; col[i*3+2] = c.b * 0.38;
       }
-      const geo = new THREE.BufferGeometry();
-      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-      geo.setAttribute('color',    new THREE.BufferAttribute(col, 3));
-      scene.add(new THREE.Points(geo, new THREE.PointsMaterial({
-        size: 0.82, vertexColors: true, transparent: true, opacity: 0.52,
-        blending: THREE.AdditiveBlending, depthWrite: false,
-      })));
+      const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3)); geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+      scene.add(new THREE.Points(geo, new THREE.PointsMaterial({ size: 0.82, vertexColors: true, transparent: true, opacity: 0.52, blending: THREE.AdditiveBlending, depthWrite: false })));
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    // 8.  COMET STREAKS
-    // ════════════════════════════════════════════════════════════════════════
-    interface Comet {
-      line: THREE.Line; arr: Float32Array;
-      seed: number; y: number; z: number; spd: number; len: number;
-    }
-    const cometColors = [
-      new THREE.Color('#58daff'), new THREE.Color('#c484ff'),
-      new THREE.Color('#b2c6ff'), new THREE.Color('#4af5b2'),
-    ];
+    // 8. COMET STREAKS
+    interface Comet { line: THREE.Line; arr: Float32Array; seed: number; y: number; z: number; spd: number; len: number; }
+    const cometColors = [ new THREE.Color('#58daff'), new THREE.Color('#c484ff'), new THREE.Color('#b2c6ff'), new THREE.Color('#4af5b2') ];
     const comets: Comet[] = Array.from({ length: 6 }, (_, i) => {
-      const arr = new Float32Array(6);
-      const geo = new THREE.BufferGeometry();
-      geo.setAttribute('position', new THREE.BufferAttribute(arr, 3));
-      const line = new THREE.Line(geo, new THREE.LineBasicMaterial({
-        color: cometColors[i % cometColors.length],
-        transparent: true, opacity: 0,
-        blending: THREE.AdditiveBlending, depthWrite: false,
-      }));
+      const arr = new Float32Array(6); const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(arr, 3));
+      const line = new THREE.Line(geo, new THREE.LineBasicMaterial({ color: cometColors[i % cometColors.length], transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false }));
       scene.add(line);
       return { line, arr, seed: Math.random(), y: rand(-150, 150), z: rand(-680, -340), spd: rand(0.005, 0.011), len: rand(55, 110) };
     });
 
     // ── Mouse + resize ────────────────────────────────────────────────────────
     const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
-    const onMouseMove = (e: MouseEvent) => {
-      mouse.tx = (e.clientX / window.innerWidth  - 0.5) * 2;
-      mouse.ty = (e.clientY / window.innerHeight - 0.5) * 2;
-    };
+    const onMouseMove = (e: MouseEvent) => { mouse.tx = (e.clientX / window.innerWidth  - 0.5) * 2; mouse.ty = (e.clientY / window.innerHeight - 0.5) * 2; };
     const onResize = () => {
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio ?? 1, 2.5));
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      root.position.x = window.innerWidth < 860 ? 0 : -155;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio ?? 1, 2.5)); renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); root.position.x = window.innerWidth < 860 ? 0 : -155;
     };
     window.addEventListener('mousemove', onMouseMove, { passive: true });
-    window.addEventListener('resize',    onResize,    { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
     onResize();
 
     // ── Animation loop ────────────────────────────────────────────────────────
-    let raf = 0;
-    const clock = new THREE.Clock();
-
+    let raf = 0; const clock = new THREE.Clock();
     const tick = () => {
       const t = clock.getElapsedTime();
+      mouse.x += (mouse.tx - mouse.x) * 0.014; mouse.y += (mouse.ty - mouse.y) * 0.014;
+      root.rotation.x = mouse.y * 0.11; root.rotation.y = mouse.x * 0.16 + t * 0.0065;
 
-      mouse.x += (mouse.tx - mouse.x) * 0.014;
-      mouse.y += (mouse.ty - mouse.y) * 0.014;
-
-      root.rotation.x = mouse.y * 0.11;
-      root.rotation.y = mouse.x * 0.16 + t * 0.0065;
-
-      // Saturn group: slow tilt + spin
-      nebulaGroup.rotation.y  = t * 0.030;
-      nebulaGroup.rotation.x  = Math.sin(t * 0.016) * 0.040;
+      nebulaGroup.rotation.y  = t * 0.030; nebulaGroup.rotation.x  = Math.sin(t * 0.016) * 0.040;
       saturnBody.rotation.y   = t * 0.08;
-      const corePulse = 1 + Math.sin(t * 0.28) * 0.03;
-      coreHalo.scale.set(320 * corePulse, 320 * corePulse, 1);
+      const corePulse = 1 + Math.sin(t * 0.28) * 0.03; coreHalo.scale.set(320 * corePulse, 320 * corePulse, 1);
 
-      keyLight.position.x = Math.cos(t * 0.055) * 130;
-      keyLight.position.z = Math.sin(t * 0.055) * 130;
-      saturnLight.position.x = Math.cos(t * 0.04 + 1.2) * 80;
-      saturnLight.position.z = Math.sin(t * 0.04 + 1.2) * 80;
+      keyLight.position.x = Math.cos(t * 0.055) * 130; keyLight.position.z = Math.sin(t * 0.055) * 130;
+      saturnLight.position.x = Math.cos(t * 0.04 + 1.2) * 80; saturnLight.position.z = Math.sin(t * 0.04 + 1.2) * 80;
 
       starGroups.forEach(s => { s.rotation.y += s.userData.spd; });
 
       auroraLayers.forEach(({ pts, buf, meta }) => {
         meta.forEach((m, i) => {
-          const a    = m.theta + t * m.spd * 0.28;
-          const wave = Math.sin(t * 0.20 + m.phase) * 20;
-          buf[i*3]   = Math.cos(a) * m.r;
-          buf[i*3+1] = m.y + wave;
-          buf[i*3+2] = Math.sin(a) * m.r;
+          const a = m.theta + t * m.spd * 0.28; const wave = Math.sin(t * 0.20 + m.phase) * 20;
+          buf[i*3] = Math.cos(a) * m.r; buf[i*3+1] = m.y + wave; buf[i*3+2] = Math.sin(a) * m.r;
         });
         (pts.geometry.attributes.position as THREE.BufferAttribute).needsUpdate = true;
         (pts.material as THREE.PointsMaterial).opacity = 0.12 + Math.sin(t * 0.13) * 0.04;
       });
 
-      const cycleT   = (Math.sin(t * 0.3) + 1) / 2;
-      const hackLevel     = Math.pow(smoothstep(0.55, 0.95, cycleT), 1.8);
+      const cycleT = (Math.sin(t * 0.3) + 1) / 2;
+      const hackLevel = Math.pow(smoothstep(0.55, 0.95, cycleT), 1.8);
       const recoveryLevel = Math.pow(smoothstep(0.02, 0.26, cycleT), 1.7) * (1 - hackLevel);
 
       orbStates.forEach((state, idx) => {
-        const p   = state.planet;
-        const pos = orbitVector(p, t);
+        const p = state.planet; const pos = orbitVector(p, t);
         const interpPos = pos.clone().lerp(new THREE.Vector3(0, 0, 0), hackLevel * 0.5);
-        if (recoveryLevel > 0.02) {
-          interpPos.add(pos.clone().normalize().multiplyScalar(recoveryLevel * 24 * Math.sin(t * 2.0 + idx)));
-        }
+        if (recoveryLevel > 0.02) { interpPos.add(pos.clone().normalize().multiplyScalar(recoveryLevel * 24 * Math.sin(t * 2.0 + idx))); }
         const pulse = 1 + Math.sin(t * 0.55 + idx * 0.85) * 0.06;
 
-        state.core.position.copy(interpPos);
-        state.core.scale.setScalar(p.radius * 2.8 * pulse);
-
-        state.mid.position.copy(interpPos);
-        state.mid.scale.setScalar(p.radius * 10 * pulse);
-
-        state.halo.position.copy(interpPos);
-        state.halo.scale.setScalar(p.radius * 26 * (1 + Math.sin(t * 0.22 + idx) * 0.04));
-
-        state.ring.position.copy(interpPos);
-        (state.ring.material as THREE.SpriteMaterial).rotation += 0.0018;
-
+        state.core.position.copy(interpPos); state.core.scale.setScalar(p.radius * 2.8 * pulse);
+        state.mid.position.copy(interpPos); state.mid.scale.setScalar(p.radius * 10 * pulse);
+        state.halo.position.copy(interpPos); state.halo.scale.setScalar(p.radius * 26 * (1 + Math.sin(t * 0.22 + idx) * 0.04));
+        state.ring.position.copy(interpPos); (state.ring.material as THREE.SpriteMaterial).rotation += 0.0018;
         state.label.position.copy(interpPos.clone().add(new THREE.Vector3(0, p.radius * 4.8 + 14, 0)));
 
-        // Trail
         state.trailPts.push(interpPos.clone());
         if (state.trailPts.length > TRAIL_MAX) state.trailPts.shift();
-        state.trailPts.forEach((tp, i) => {
-          state.trailBuf[i*3]   = tp.x;
-          state.trailBuf[i*3+1] = tp.y;
-          state.trailBuf[i*3+2] = tp.z;
-        });
+        state.trailPts.forEach((tp, i) => { state.trailBuf[i*3] = tp.x; state.trailBuf[i*3+1] = tp.y; state.trailBuf[i*3+2] = tp.z; });
         (state.trailGeo.attributes.position as THREE.BufferAttribute).needsUpdate = true;
 
-        if (idx < 4) {
-          orbLights[idx].position.copy(interpPos);
-          orbLights[idx].intensity = 2.0 + pulse * 0.6;
-        }
+        if (idx < 4) { orbLights[idx].position.copy(interpPos); orbLights[idx].intensity = 2.0 + pulse * 0.6; }
       });
 
       comets.forEach(c => {
-        const prog = (t * c.spd + c.seed) % 1.0;
-        const x    = -750 + prog * 1500;
-        c.arr[0] = x;       c.arr[1] = c.y;                    c.arr[2] = c.z;
-        c.arr[3] = x-c.len; c.arr[4] = c.y + c.len * 0.14;     c.arr[5] = c.z;
+        const prog = (t * c.spd + c.seed) % 1.0; const x = -750 + prog * 1500;
+        c.arr[0] = x; c.arr[1] = c.y; c.arr[2] = c.z; c.arr[3] = x-c.len; c.arr[4] = c.y + c.len * 0.14; c.arr[5] = c.z;
         (c.line.geometry.attributes.position as THREE.BufferAttribute).needsUpdate = true;
         (c.line.material as THREE.LineBasicMaterial).opacity = Math.sin(prog * Math.PI) * 0.50;
       });
@@ -817,15 +551,11 @@ function CinematicScene() {
 
     tick();
 
-    // ── Cleanup ───────────────────────────────────────────────────────────────
     return () => {
-      cancelled = true;
-      cancelAnimationFrame(raf);
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('resize',    onResize);
+      cancelled = true; cancelAnimationFrame(raf);
+      window.removeEventListener('mousemove', onMouseMove); window.removeEventListener('resize', onResize);
       if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
-      textures.forEach(tx => tx.dispose());
-      renderer.dispose();
+      textures.forEach(tx => tx.dispose()); renderer.dispose();
     };
   }, []);
 
@@ -833,7 +563,7 @@ function CinematicScene() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// UI COMPONENTS  (all original, untouched)
+// UI COMPONENTS
 // ─────────────────────────────────────────────────────────────────────────────
 
 function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
@@ -842,9 +572,7 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) setShow(true);
-    }, { threshold: 0.1 });
+    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) setShow(true); }, { threshold: 0.1 });
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
@@ -952,16 +680,22 @@ export default function DashboardPage() {
           font-family: Inter, system-ui, sans-serif;
         }
 
+        /* ── HERO FIXED FOR PHONE / DESKTOP MODE ── */
         .ss-hero {
+          min-height: 100vh;
           min-height: 100svh;
           display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          padding: 124px clamp(18px, 6vw, 82px) 78px;
+          align-items: center; /* Center vertically to avoid huge empty top gap */
+          justify-content: flex-end; /* Push to right on desktop */
+          padding: 100px clamp(20px, 6vw, 80px) 60px;
           position: relative;
         }
 
-        .ss-hero-copy { width: min(500px, 100%); will-change: opacity, transform; }
+        .ss-hero-copy { 
+          width: 100%; 
+          max-width: 520px; 
+          will-change: opacity, transform; 
+        }
 
         .ss-kicker {
           display: inline-flex;
@@ -1011,7 +745,8 @@ export default function DashboardPage() {
           line-height: 1.68;
         }
 
-        .ss-actions-row { display: flex; flex-wrap: wrap; gap: 8px; }
+        /* Wrap buttons correctly on mobile */
+        .ss-actions-row { display: flex; flex-wrap: wrap; gap: 10px; }
 
         .ss-btn {
           display: inline-flex;
@@ -1283,8 +1018,13 @@ export default function DashboardPage() {
         }
         @keyframes holoSpin { to { transform: rotate(360deg); } }
 
+        /* ── RESPONSIVE FIXES ── */
         @media (max-width: 980px) {
-          .ss-hero { align-items: flex-end; justify-content: flex-start; padding: 112px 18px 82px; }
+          .ss-hero { 
+            align-items: center; /* FIXED: Vertical center on phone */
+            justify-content: flex-start; /* Push to left */
+            padding: 120px 24px 80px; 
+          }
           .ss-telemetry, .ss-cortex, .ss-command-bay { grid-template-columns: 1fr; }
           .ss-holo { min-height: 196px; }
           .ss-cortex-rail { position: relative; top: auto; min-height: 210px; }
@@ -1295,7 +1035,7 @@ export default function DashboardPage() {
         @media (max-width: 640px) {
           .ss-title { font-size: clamp(56px, 16vw, 92px); }
           .ss-title span { padding-left: 18px; }
-          .ss-actions-row { display: grid; grid-template-columns: 1fr; }
+          .ss-actions-row { display: flex; flex-wrap: wrap; gap: 10px; } /* Ensures buttons wrap nicely */
           .ss-btn { width: 100%; }
           .ss-status-row { grid-template-columns: 1fr; gap: 6px; }
           .ss-stat-cloud, .ss-command-grid { grid-template-columns: 1fr; }
@@ -1433,7 +1173,7 @@ export default function DashboardPage() {
                 <ActionCard href="/buy-policy"  label="Coverage" title="Buy Policy"      desc="Insure DeFi positions against smart contract exploits."   color="255,198,118" />
                 <ActionCard href="/claims"       label="Claims"   title="File Claim"         desc="Submit evidence and request settlement from the pool."   color="255,104,124" />
                 <ActionCard href="/governance"   label="DAO"      title="Vote Claims"        desc="Use SHIELD voting power to resolve active claims."       color="74,245,178"  />
-                <ActionCard href="/governance"   label="Capital"  title="Provide Liquidity"  desc="Deposit USDC to earn yield and premium flow."           color="178,198,255" />
+                <ActionCard href="/pool"         label="Capital"  title="Provide Liquidity"  desc="Deposit USDC to earn yield and premium flow."           color="178,198,255" />
               </div>
             </div>
           </Reveal>
