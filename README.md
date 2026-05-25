@@ -4,7 +4,7 @@
 <img src="https://img.shields.io/badge/🛡️-Sentinel_Insurance_Protocol-2563EB?style=for-the-badge&labelColor=0f172a&color=2563EB" height="36"/>
 
 # Decentralized On-Chain Insurance Infrastructure
-### Ethereum Sepolia · ERC-4626 Yield Routing · DAO Adjudication · Next.js 3D Engine
+### Ethereum Sepolia · ERC-4626 Yield Routing · DAO Adjudication · Next.js 3D Engine 
 <br> 
 
 [![Live App](https://img.shields.io/badge/Live_App-Vercel-000000?style=flat-square&logo=vercel)](https://sentinel-insurance-protocol.vercel.app/)
