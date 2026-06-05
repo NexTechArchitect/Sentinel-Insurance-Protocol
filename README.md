@@ -46,16 +46,16 @@ SentinelShield fundamentally re-architects this model.
 
 ## 📑 Table of Contents
 
-1. [🏛️ Protocol Architecture](#-protocol-architecture)
-2. [✅ Deployed Infrastructure (Base Mainnet)](#-deployed-infrastructure-base-mainnet)
-3. [📁 Codebase Structure](#-codebase-structure)
-4. [🧩 Contract Reference](#-contract-reference)
-5. [🛡️ Security & Audit Profile](#-security--audit-profile)
-6. [🛠️ Local Setup & Automation](#-local-setup--automation)
+1. [🏛️ Protocol Architecture](#protocol-architecture)
+2. [✅ Deployed Infrastructure (Base Mainnet)](#deployed-infrastructure)
+3. [📁 Codebase Structure](#codebase-structure)
+4. [🧩 Contract Reference](#contract-reference)
+5. [🛡️ Security & Audit Profile](#security-audit)
+6. [🛠️ Local Setup & Automation](#local-setup)
 
 ---
 
-## 🏛️ Protocol Architecture
+## <a id="protocol-architecture"></a> 🏛️ Protocol Architecture
 
 The system operates across three isolated execution layers governed by a unified Next.js dashboard. A failure in governance voting cannot drain the underlying capital vault.
 
@@ -88,7 +88,7 @@ The system operates across three isolated execution layers governed by a unified
 
 ---
 
-## ✅ Deployed Infrastructure (Base Mainnet)
+##  ✅ Deployed Infrastructure (Base Mainnet)
 
 All core systems are actively deployed, strictly wired, and cryptographically verified on **Base Mainnet**, handling live USDC assets.
 
@@ -107,7 +107,7 @@ All core systems are actively deployed, strictly wired, and cryptographically ve
 
 ---
 
-## 📁 Codebase Structure
+##  📁 Codebase Structure
 
 The protocol is structured as a streamlined mono-repo separating EVM logic from the client application.
 
@@ -122,7 +122,7 @@ Sentinel-Insurance-Protocol/
 
 ---
 
-## 🧩 Contract Reference
+##  🧩 Contract Reference
 
 * **`PolicyEngine.sol`**: Central hub for policy origination. Executes atomic validations, locks premiums, and triggers NFT minting.
 * **`CoveragePool.sol` (ERC-4626)**: The capital vault. Sweeps surplus USDC into Aave V3 lending pools to accrue yield for LPs.
@@ -131,7 +131,7 @@ Sentinel-Insurance-Protocol/
 
 ---
 
-## 🛡️ Security & Audit Profile
+##  🛡️ Security & Audit Profile
 
 **Audit Engine:** Slither v0.10.x Static Analyzer
 
@@ -143,7 +143,7 @@ Sentinel-Insurance-Protocol/
 
 ---
 
-## 🛠️ Local Setup & Automation
+##  🛠️ Local Setup & Automation
 
 ### 1. Smart Contracts (Foundry)
 
