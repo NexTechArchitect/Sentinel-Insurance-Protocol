@@ -22,7 +22,7 @@
 <h3><a href="https://sentinel-insurance-protocol.vercel.app/">🚀 Launch Live Application</a></h3>
 
 <a href="https://github.com/NexTechArchitect/Sentinel-Insurance-Protocol">💻 Source Code</a> &nbsp;·&nbsp;
-<a href="https://basescan.org/address/0xEF80cd6370D4619D2f71BD4000a4757357Be5564">🔗 Core Contract</a> &nbsp;·&nbsp;
+<a href="https://basescan.org/address/0xEF80cd6370D4619D2f71BD4000a4757357Be5564">🔗 Core Contract (Verified)</a> &nbsp;·&nbsp;
 <a href="https://docs.base.org/">📘 Base Ecosystem</a>
 
 </div>
@@ -91,14 +91,16 @@ The system operates across three isolated execution layers governed by a unified
 
 All core systems are actively deployed, strictly wired, and cryptographically verified on **Base Mainnet**, handling live USDC assets.
 
+*(Click on any address to view verified on-chain code and live transactions directly on Basescan).*
+
 ### Core Engine & Governance
 
-| Component | Address | Explorer |
+| Component | Address | Explorer Link |
 | --- | --- | --- |
-| **PolicyEngine** | `0xEF80cd6370D4619D2f71BD4000a4757357Be5564` | [Basescan ↗](https://www.google.com/url?sa=E&source=gmail&q=https://basescan.org/address/0xEF80cd6370D4619D2f71BD4000a4757357Be5564) |
-| **CoveragePool** | `0x374d949c7A575212d423Ecc0e765a59664d7C3eD` | [Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0x374d949c7A575212d423Ecc0e765a59664d7C3eD) |
-| **ClaimsGovernor** | `0xB7939f8b41C932595cf358842BC63AFE221D2Ba3` | [Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0xB7939f8b41C932595cf358842BC63AFE221D2Ba3) |
-| **VetoCouncil** | `0x896627825AEAc934e4CAec4cb00EC8B90a5292B0` | [Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0x896627825AEAc934e4CAec4cb00EC8B90a5292B0) |
+| **PolicyEngine** | `0xEF80cd6370D4619D2f71BD4000a4757357Be5564` | [View on Basescan ↗](https://www.google.com/url?sa=E&source=gmail&q=https://basescan.org/address/0xEF80cd6370D4619D2f71BD4000a4757357Be5564) |
+| **CoveragePool** | `0x374d949c7A575212d423Ecc0e765a59664d7C3eD` | [View on Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0x374d949c7A575212d423Ecc0e765a59664d7C3eD) |
+| **ClaimsGovernor** | `0xB7939f8b41C932595cf358842BC63AFE221D2Ba3` | [View on Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0xB7939f8b41C932595cf358842BC63AFE221D2Ba3) |
+| **VetoCouncil** | `0x896627825AEAc934e4CAec4cb00EC8B90a5292B0` | [View on Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0x896627825AEAc934e4CAec4cb00EC8B90a5292B0) |
 
 *(Refer to `web3-app/src/constants/contracts.ts` for the complete registry including Token & External Integrations).*
 
@@ -170,9 +172,8 @@ npm run dev
 
 ---
 
-<div align="center">
-**SentinelShield Protocol**
 
+<div align="center">
 *Engineered for the Decentralized Frontier.*
 
 Architected by **NexTechArchitect**
