@@ -161,8 +161,6 @@ All contracts deployed, verified, and live on **Base Mainnet** (Chain ID: `8453`
 - `_decimalsOffset = 6` — ERC-4626 share inflation attack mitigated
 - `Ownable2Step` on all privileged contracts
 
-> **Disclaimer:** Slither static analysis is not a substitute for a full manual audit. Use at your own risk.
-
 ---
 
 ## Local Development
@@ -186,19 +184,6 @@ forge script script/DeploySentinel.s.sol:DeploySentinel --rpc-url https://mainne
 cd web3-app && npm install && npm run dev
 ```
 
-```
-Sentinel-Insurance-Protocol/
-├── src/
-│   ├── core/           # PolicyEngine, CoveragePool, ClaimsGovernor, PayoutExecutor
-│   ├── governance/     # ShieldToken, VetoCouncil
-│   ├── registry/       # RiskRegistry
-│   ├── token/          # PolicyNFT
-│   ├── libraries/      # PremiumMath, ClaimValidator, PolicyNFTSVG
-│   └── interfaces/     # All contract interfaces
-├── script/             # Foundry deployment scripts
-├── test/               # Fuzz & invariant test suites
-└── web3-app/           # Next.js 14 frontend + Wagmi
-```
 
 ---
 
