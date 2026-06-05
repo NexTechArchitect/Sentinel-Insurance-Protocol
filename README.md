@@ -1,178 +1,247 @@
-
 <div align="center">
 
-<img src="https://img.shields.io/badge/🛡️-Sentinel_Insurance_Protocol-2563EB?style=for-the-badge&labelColor=0f172a&color=2563EB" height="36"/>
+<br/>
 
-# Decentralized On-Chain Insurance Infrastructure
-### Base Mainnet · ERC-4626 Yield Routing · DAO Adjudication · Next.js 3D Engine 
-<br>
- 
-[![Live App](https://img.shields.io/badge/Production-Live_App-22c55e?style=flat-square&logo=vercel)](https://sentinel-insurance-protocol.vercel.app/)
-[![Network](https://img.shields.io/badge/Network-Base_Mainnet-0052FF?style=flat-square&logo=base)](https://basescan.org/)
-[![Foundry](https://img.shields.io/badge/Contracts-Foundry-F0B90B?style=flat-square)](https://book.getfoundry.sh/)
-[![Frontend](https://img.shields.io/badge/Frontend-Next.js_14-000000?style=flat-square&logo=next.js)](https://nextjs.org/)
+<img src="https://img.shields.io/badge/🛡️_SENTINEL-SHIELD_PROTOCOL-6366f1?style=for-the-badge&labelColor=0f172a" height="40"/>
 
-<br> 
+<br/><br/>
 
-> **A highly modular, security-first DeFi insurance architecture.** <br>
-> Token-weighted consensus adjudication, automated capital optimization via Aave V3, and flash-loan resistant governance voting—wrapped in a high-performance WebGL 3D interface. Securing real-world assets on the Base Layer-2 ecosystem.
+**Decentralized On-Chain Insurance Infrastructure**
 
-<br>
+*Base Mainnet · ERC-4626 Yield Routing · DAO Adjudication · Flash-Loan Resistant Governance*
 
-<h3><a href="https://sentinel-insurance-protocol.vercel.app/">🚀 Launch Live Application</a></h3>
+<br/>
 
-<a href="https://github.com/NexTechArchitect/Sentinel-Insurance-Protocol">💻 Source Code</a> &nbsp;·&nbsp;
-<a href="https://basescan.org/address/0xEF80cd6370D4619D2f71BD4000a4757357Be5564">🔗 Core Contract (Verified)</a> &nbsp;·&nbsp;
-<a href="https://docs.base.org/">📘 Base Ecosystem</a>
+[![Live App](https://img.shields.io/badge/Production-Live_App-22c55e?style=flat-square&logo=vercel&logoColor=white)](https://sentinel-insurance-protocol.vercel.app/)
+[![Network](https://img.shields.io/badge/Network-Base_Mainnet-0052FF?style=flat-square&logo=base&logoColor=white)](https://basescan.org/)
+[![Solidity](https://img.shields.io/badge/Solidity-0.8.24-363636?style=flat-square&logo=solidity)](https://soliditylang.org/)
+[![Foundry](https://img.shields.io/badge/Tests-Foundry-F0B90B?style=flat-square)](https://book.getfoundry.sh/)
+[![OpenZeppelin](https://img.shields.io/badge/OpenZeppelin-5.x-4E5EE4?style=flat-square)](https://openzeppelin.com/)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+
+<br/>
+
+> A modular, security-first DeFi insurance protocol built on Base L2.
+> Token-weighted DAO adjudication, automated yield via Aave V3, and soulbound policy NFTs —
+> engineered to secure real-world DeFi assets against smart contract exploits.
+
+<br/>
+
+[🚀 Launch App](https://sentinel-insurance-protocol.vercel.app/) &nbsp;·&nbsp;
+[📄 Source Code](https://github.com/NexTechArchitect/Sentinel-Insurance-Protocol) &nbsp;·&nbsp;
+[🔗 Core Contract](https://basescan.org/address/0xEF80cd6370D4619D2f71BD4000a4757357Be5564)
+
+<br/>
 
 </div>
 
 ---
 
-## 🎯 The Problem & The Sentinel Solution
+## Table of Contents
 
-Traditional decentralized insurance protocols face three critical bottlenecks: **severe capital inefficiency** (locking collateral without yield), **centralized claim adjudication** (relying on single points of failure), and **vulnerability to flash-loan governance attacks**. 
-
-SentinelShield fundamentally re-architects this model.
-
-| The Core Problem | The Sentinel Solution |
-| :--- | :--- |
-| **Capital Inefficiency (Idle TVL)**<br>Locked collateral sits idle, creating a massive opportunity cost for liquidity providers. | **Automated Yield Routing**<br>`CoveragePool` implements an ERC-4626 vault architecture, natively routing idle USDC into the Aave V3 Base Core to generate continuous APY, ensuring zero capital drag. |
-| **Governance Manipulation**<br>Whales use flash-loans to borrow tokens, pass malicious claims, and dump the tokens in a single block. | **Flash-Resistant DAO Consensus**<br>`ClaimsGovernor` enforces strict `block.number - 1` snapshot voting, ensuring only genuine, long-term $SHIELD holders can influence claim adjudication. |
-| **Centralized Points of Failure**<br>Protocols rely on centralized oracles or a small multi-sig board to approve user payouts. | **Decentralized Adjudication Engine**<br>Claims undergo a strict 7-day token-weighted public consensus window. A multi-sig `VetoCouncil` exists *only* as a structural safety valve against systemic fraud, not for standard approvals. |
-| **Illiquid & Static Policies**<br>Insurance receipts are non-transferable data points hidden in contract state. | **Dynamic On-Chain NFT Portfolios**<br>Active policies are minted as fully transferable ERC-721 `PolicyNFTs` with dynamically generated SVG art reflecting real-time coverage states directly on-chain. |
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Deployed Contracts](#deployed-contracts)
+- [Contract Reference](#contract-reference)
+- [Security](#security)
+- [Local Development](#local-development)
 
 ---
 
-## 📑 Table of Contents
+## Overview
 
-1. [🏛️ Protocol Architecture](#protocol-architecture)
-2. [✅ Deployed Infrastructure (Base Mainnet)](#deployed-infrastructure)
-3. [📁 Codebase Structure](#codebase-structure)
-4. [🧩 Contract Reference](#contract-reference)
-5. [🛡️ Security & Audit Profile](#security-audit)
-6. [🛠️ Local Setup & Automation](#local-setup)
+SentinelShield re-architects the three core failures of traditional DeFi insurance:
+
+| Problem | Solution |
+|:---|:---|
+| **Idle Capital (Zero Yield)** | `CoveragePool` implements ERC-4626, routing all idle USDC into Aave V3 Base Core — continuous APY with zero capital drag. |
+| **Flash-Loan Governance Attacks** | `ClaimsGovernor` enforces `block.number - 1` snapshot voting — only genuine long-term `$SHIELD` holders influence adjudication. |
+| **Centralized Claim Approval** | 7-day public token-weighted voting window. `VetoCouncil` multisig exists solely as an emergency fraud safety valve, not for standard approvals. |
+| **Non-Transferable Static Policies** | Active policies mint as ERC-721 `PolicyNFTs` with fully on-chain SVG art reflecting real-time coverage state. Soulbound via ERC-5484. |
 
 ---
 
-## <a id="protocol-architecture"></a> 🏛️ Protocol Architecture
+## Architecture
 
-The system operates across three isolated execution layers governed by a unified Next.js dashboard. A failure in governance voting cannot drain the underlying capital vault.
-
-```text
-┌──────────────────────────────────────────────────────────────────┐
-│                    WEB3 FRONTEND (Next.js / Wagmi)               │
-│             App.SentinelShield.finance (Cinematic UI)            │
-└───────────────────────────┬──────────────────────────────────────┘
-                            │ (USDC / Proof URIs)
-┌───────────────────────────▼──────────────────────────────────────┐
-│                    POLICY ROUTING ENGINE                         │
-│  PolicyEngine.sol  ──  RiskRegistry.sol  ──  PolicyNFT.sol (721) │
-│  Validates risk profiles, routes premiums, and mints receipts    │
-└────────────┬─────────────────────────────────┬───────────────────┘
-             │                                 │
-┌────────────▼────────────┐       ┌────────────▼────────────────── ┐
-│ CAPITAL UNDERWRITING    │       │ DECENTRALIZED ADJUDICATION     │
-│ CoveragePool.sol (4626) │       │ ClaimsGovernor.sol             │
-│ Routes idle USDC to     │       │ Snapshot block-voting via      │
-│ Aave V3 for LP yield.   │       │ ShieldToken.sol ($SHIELD)      │
-└────────────┬────────────┘       └────────────┬────────────────── ┘
-             │                                 │
-┌────────────▼─────────────────────────────────▼───────────────────┐
-│                    PAYOUT EXECUTION PIPELINE                     │
-│  PayoutExecutor.sol ── VetoCouncil.sol (Emergency Multisig)      │
-│  Unlocks CoveragePool liquidity upon successful consensus vote   │
-└──────────────────────────────────────────────────────────────────┘
+The protocol operates across three isolated execution layers. A failure in governance cannot drain the capital vault.
 
 ```
-
----
-
-##  ✅ Deployed Infrastructure (Base Mainnet)
-
-All core systems are actively deployed, strictly wired, and cryptographically verified on **Base Mainnet**, handling live USDC assets.
-
-*(Click on any address to view verified on-chain code and live transactions directly on Basescan).*
-
-### Core Engine & Governance
-
-| Component | Address | Explorer Link |
-| --- | --- | --- |
-| **PolicyEngine** | `0xEF80cd6370D4619D2f71BD4000a4757357Be5564` | [View on Basescan ↗](https://basescan.org/address/0xEF80cd6370D4619D2f71BD4000a4757357Be5564) |
-| **CoveragePool** | `0x374d949c7A575212d423Ecc0e765a59664d7C3eD` | [View on Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0x374d949c7A575212d423Ecc0e765a59664d7C3eD) |
-| **ClaimsGovernor** | `0xB7939f8b41C932595cf358842BC63AFE221D2Ba3` | [View on Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0xB7939f8b41C932595cf358842BC63AFE221D2Ba3) |
-| **VetoCouncil** | `0x896627825AEAc934e4CAec4cb00EC8B90a5292B0` | [View on Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0x896627825AEAc934e4CAec4cb00EC8B90a5292B0) |
-
-*(Refer to `web3-app/src/constants/contracts.ts` for the complete registry including Token & External Integrations).*
-
----
-
-##  📁 Codebase Structure
-
-The protocol is structured as a streamlined mono-repo separating EVM logic from the client application.
-
-```text
-Sentinel-Insurance-Protocol/
-├── src/                 # Smart Contracts (Core, Governance, Oracles, Tokens)
-├── script/              # Foundry Deployment & Execution Matrix
-├── test/                # Fuzzing & Invariant Test Suites
-└── web3-app/            # Next.js 14 Frontend & Wagmi Integrations
-
+┌─────────────────────────────────────────────────────────────────┐
+│                   WEB3 FRONTEND (Next.js / Wagmi)               │
+│            sentinel-insurance-protocol.vercel.app               │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │ USDC / Evidence URIs
+┌──────────────────────────▼──────────────────────────────────────┐
+│                    POLICY ROUTING LAYER                         │
+│   PolicyEngine.sol  ──  RiskRegistry.sol  ──  PolicyNFT.sol     │
+│   Validates risk · routes premiums · mints soulbound receipts   │
+└────────────┬────────────────────────────────┬───────────────────┘
+             │                                │
+┌────────────▼───────────┐      ┌─────────────▼──────────────────┐
+│  CAPITAL LAYER         │      │  ADJUDICATION LAYER            │
+│  CoveragePool.sol      │      │  ClaimsGovernor.sol            │
+│  ERC-4626 vault        │      │  Snapshot block-voting         │
+│  Auto-routes to Aave   │      │  via ShieldToken ($SHIELD)     │
+└────────────┬───────────┘      └─────────────┬──────────────────┘
+             │                                │
+┌────────────▼────────────────────────────────▼───────────────────┐
+│                    PAYOUT EXECUTION LAYER                       │
+│     PayoutExecutor.sol  ──  VetoCouncil.sol (Emergency Msig)    │
+│     Unlocks CoveragePool liquidity on successful DAO vote       │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
----
+**Key design invariants:**
 
-##  🧩 Contract Reference
-
-* **`PolicyEngine.sol`**: Central hub for policy origination. Executes atomic validations, locks premiums, and triggers NFT minting.
-* **`CoveragePool.sol` (ERC-4626)**: The capital vault. Sweeps surplus USDC into Aave V3 lending pools to accrue yield for LPs.
-* **`ClaimsGovernor.sol`**: The decentralized adjudication machine featuring strict block-snapshot queries to neutralize flash-loan attacks.
-* **`VetoCouncil.sol`**: A multi-signature threshold contract acting as a final fail-safe mechanism against fraudulent consensus.
+- All role assignments are one-time immutable (no admin key rotation attack surface)
+- CEI (Checks-Effects-Interactions) enforced on every state-changing function
+- `ReentrancyGuard` on all external entry points touching capital
+- Flash-loan immunity via ERC20Votes `getPastVotes(addr, block.number - 1)`
 
 ---
 
-##  🛡️ Security & Audit Profile
+## Deployed Contracts
 
-**Audit Engine:** Slither v0.10.x Static Analyzer
+All contracts are deployed, verified, and live on **Base Mainnet** (Chain ID: `8453`).
 
-**Framework Integration:** Foundry (Forge Artifact Matrix with Yul IR Optimization)
+### Protocol Contracts
 
-**Security Status:** Deployed to Base Mainnet (✅ 100% Cleared)
+| Contract | Address | Basescan |
+|:---|:---|:---|
+| **PolicyEngine** | `0xEF80cd6370D4619D2f71BD4000a4757357Be5564` | [↗ View](https://basescan.org/address/0xEF80cd6370D4619D2f71BD4000a4757357Be5564) |
+| **CoveragePool** | `0x374d949c7A575212d423Ecc0e765a59664d7C3eD` | [↗ View](https://basescan.org/address/0x374d949c7A575212d423Ecc0e765a59664d7C3eD) |
+| **ClaimsGovernor** | `0xB7939f8b41C932595cf358842BC63AFE221D2Ba3` | [↗ View](https://basescan.org/address/0xB7939f8b41C932595cf358842BC63AFE221D2Ba3) |
+| **VetoCouncil** | `0x896627825AEAc934e4CAec4cb00EC8B90a5292B0` | [↗ View](https://basescan.org/address/0x896627825AEAc934e4CAec4cb00EC8B90a5292B0) |
+| **RiskRegistry** | `0x049C2eC773cDa5F3a19F9cc7C67D3331C21853DB` | [↗ View](https://basescan.org/address/0x049C2eC773cDa5F3a19F9cc7C67D3331C21853DB) |
+| **ShieldToken** | `0xafE2B560ad1743DA67BdA1850aF47CdB2280a2d1` | [↗ View](https://basescan.org/address/0xafE2B560ad1743DA67BdA1850aF47CdB2280a2d1) |
+| **PolicyNFT** | `0x02A9E50D9EB6fec67c419C5ddb3ffd894DD01C00` | [↗ View](https://basescan.org/address/0x02A9E50D9EB6fec67c419C5ddb3ffd894DD01C00) |
+| **PayoutExecutor** | `0x897a76eC710DC780E4627532A0e863F2672d50A7` | [↗ View](https://basescan.org/address/0x897a76eC710DC780E4627532A0e863F2672d50A7) |
 
-> **Defense Validation:** The static scanning analysis confirms zero structural data-leakage vectors, non-reentrant state transitions, and absolute mathematical precision across internal processing paths. Fuzz and invariant depth configured to enterprise standards.
+### External Integrations
+
+| Protocol | Address | Basescan |
+|:---|:---|:---|
+| **Aave V3 Pool** | `0xA238Dd80C259b705191C65851448bB1e2D3b3790` | [↗ View](https://basescan.org/address/0xA238Dd80C259b705191C65851448bB1e2D3b3790) |
+| **USDC (Native)** | `0x833589fCD6eDb6E08f4c7C32D4f71b54bda02913` | [↗ View](https://basescan.org/address/0x833589fCD6eDb6E08f4c7C32D4f71b54bda02913) |
+| **aUSDC (Aave)** | `0x724dc807b0491c6b13239c33e2182c40c741ea1c` | [↗ View](https://basescan.org/address/0x724dc807b0491c6b13239c33e2182c40c741ea1c) |
 
 ---
 
-##  🛠️ Local Setup & Automation
+## Contract Reference
 
-### 1. Smart Contracts (Foundry)
+### `PolicyEngine.sol`
+Central hub for policy origination. Validates protocol eligibility via `RiskRegistry`, calculates premiums via `PremiumMath`, pulls USDC from the buyer, routes premiums to `CoveragePool`, locks coverage collateral, and mints a soulbound `PolicyNFT`. Also handles cancellations (pro-rated refund via pull pattern) and expiry (public keeper function).
+
+### `CoveragePool.sol` — ERC-4626
+The capital vault. All deposited USDC is automatically supplied to Aave V3 Base Core via the `_deposit` hook, accruing continuous yield for LPs. `totalAssets()` reads live `aUSDC` balance, so share pricing reflects real-time yield. A `_decimalsOffset()` of `6` mitigates share inflation attacks for USDC's 6-decimal precision. Free vs locked liquidity is tracked to prevent LP withdrawals from eating into active coverage collateral.
+
+### `ClaimsGovernor.sol`
+The adjudication engine. Policyholders file claims with IPFS/Arweave evidence. A 7-day voting window opens immediately; `$SHIELD` holders vote using balances snapshotted at `block.number - 1` to neutralize same-block flash-loan manipulation. `finalizeClaim()` is a public keeper function — anyone can call it after the window closes. Quorum is 1% of total supply; simple majority wins.
+
+### `VetoCouncil.sol`
+M-of-N multisig safety valve. Guardians can collectively veto a `PENDING` claim before it finalizes. Designed only for systemic fraud or governance attacks — not routine claim review. Threshold and guardian set are owner-managed with safe invariant checks.
+
+### `PayoutExecutor.sol`
+Single-purpose payout executor. After a claim reaches `APPROVED`, anyone can call `executePayout()` (keeper pattern). Marks the claim `EXECUTED` in `ClaimsGovernor` before withdrawing from `CoveragePool` (CEI). Emits `PayoutFailed` instead of reverting on pool failure to prevent claims getting permanently stuck.
+
+### `RiskRegistry.sol`
+Owner-controlled registry of insurable protocols. Stores `riskScore` (0–100), `audited` status, `coverageCap`, and `active` flag per protocol. `PolicyEngine` queries this for eligibility checks and premium inputs. Protocols can be blacklisted without affecting existing active policies.
+
+### `ShieldToken.sol` — ERC-20 Votes
+Governance token. Implements `ERC20Votes` for snapshot-based voting power, `ERC20Permit` for gasless approvals, and `ERC20Burnable`. Hard-capped at 100M `$SHIELD`. Users must `delegate()` before their balance counts as voting power.
+
+### `PolicyNFT.sol` — ERC-721 Soulbound
+Non-transferable policy receipt (ERC-5484). Dynamically rendered on-chain SVG via `PolicyNFTSVG` library — no IPFS dependency. Status updates trigger `MetadataUpdate` (ERC-4906) for indexer cache invalidation. Burn-on-cancel keeps state clean.
+
+---
+
+## Security
+
+**Static Analysis:** Slither v0.10.x — zero high/medium findings on deployed build.
+
+**Framework:** Foundry with Yul IR optimization, fuzz testing, and invariant suites.
+
+**Key mitigations implemented:**
+
+- Flash-loan resistant voting via `ERC20Votes.getPastVotes(addr, block.number - 1)`
+- CEI pattern enforced on all capital-touching functions
+- `ReentrancyGuard` on `CoveragePool`, `ClaimsGovernor`, `PolicyEngine`, `PayoutExecutor`
+- One-time role initialization (no post-deploy admin key rotation)
+- Pull-pattern refunds to prevent DoS via reverting recipients
+- `_decimalsOffset = 6` in ERC-4626 prevents share inflation attacks
+- `Ownable2Step` on all privileged contracts — two-step ownership transfer
+
+> **Disclaimer:** Slither static analysis is not a substitute for a full manual audit. Use at your own risk. Smart contracts on mainnet carry inherent financial risk.
+
+---
+
+## Local Development
+
+### Prerequisites
+
+- [Foundry](https://book.getfoundry.sh/getting-started/installation)
+- [Node.js](https://nodejs.org/) v18+
+- [Git](https://git-scm.com/)
+
+### Smart Contracts
 
 ```bash
-git clone [https://github.com/NexTechArchitect/Sentinel-Insurance-Protocol.git](https://github.com/NexTechArchitect/Sentinel-Insurance-Protocol.git)
+git clone https://github.com/NexTechArchitect/Sentinel-Insurance-Protocol.git
 cd Sentinel-Insurance-Protocol
 
-# Install dependencies and compile
+# Install dependencies
 forge install
-make compile
 
-# Mainnet Fork Simulation
-forge script script/DeploySentinel.s.sol:DeploySentinel --rpc-url [https://mainnet.base.org](https://mainnet.base.org) -vvv
+# Compile
+forge build
 
+# Run tests (fuzz + invariant)
+forge test -vvv
+
+# Mainnet fork simulation
+forge script script/DeploySentinel.s.sol:DeploySentinel \
+  --rpc-url https://mainnet.base.org \
+  --vvv
 ```
 
-### 2. Web3 Frontend (Next.js)
+### Frontend
 
 ```bash
 cd web3-app
+
+# Install dependencies
 npm install
 
-# Run local development server
+# Start dev server
 npm run dev
+```
 
+The frontend connects to Base Mainnet by default. Contract addresses are sourced from `web3-app/src/constants/contracts.ts`.
+
+---
+
+### Repository Structure
+
+```
+Sentinel-Insurance-Protocol/
+├── src/
+│   ├── core/           # PolicyEngine, CoveragePool, ClaimsGovernor, PayoutExecutor
+│   ├── governance/     # ShieldToken, VetoCouncil
+│   ├── registry/       # RiskRegistry
+│   ├── token/          # PolicyNFT
+│   ├── libraries/      # PremiumMath, ClaimValidator, PolicyNFTSVG
+│   └── interfaces/     # All contract interfaces
+├── script/             # Foundry deployment scripts
+├── test/               # Fuzz & invariant test suites
+└── web3-app/           # Next.js 14 frontend + Wagmi
 ```
 
 ---
 
-**SentinelShield Protocol** *Engineered for the Decentralized Frontier.*
+<div align="center">
 
-Architected by **NexTechArchitect** Smart Contract Engineer & Full-Stack Web3 Developer
+Built on **Base** · Secured by **Aave V3** · Governed by **$SHIELD**
+
+*Engineered by [NexTechArchitect](https://github.com/NexTechArchitect)*
+
+</div>
