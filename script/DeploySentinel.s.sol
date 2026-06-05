@@ -14,16 +14,16 @@ import {VetoCouncil} from "../src/governance/VetoCouncil.sol";
 /**
  * @title   DeploySentinel
  * @author  NexTechArchitect
- * @notice  Master deployment script orchestration for the SentinelShield protocol ecosystem.
+ * @notice  Master deployment script orchestration for the SentinelShield protocol ecosystem on Base Mainnet.
  * @dev     Executes sequential atomic deployment and cross-contract linking within a single script context.
  */
 contract DeploySentinel is Script {
     function run() external {
-        // Load configurations from ambient environment matrix
+        // Load configurations from ambient environment matrix (Base Mainnet Core Clusters)
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        address usdc = vm.envAddress("SEPOLIA_USDC_ADDRESS");
-        address aavePool = vm.envAddress("SEPOLIA_AAVE_POOL_ADDRESS");
-        address aUsdc = vm.envAddress("SEPOLIA_A_USDC_ADDRESS");
+        address usdc = vm.envAddress("BASE_USDC_ADDRESS");
+        address aavePool = vm.envAddress("BASE_AAVE_POOL_ADDRESS");
+        address aUsdc = vm.envAddress("BASE_A_USDC_ADDRESS");
 
         // Validate ambient environment addresses before hitting the EVM infrastructure
         require(usdc != address(0), "DeploySentinel: Invalid USDC address");
@@ -34,7 +34,7 @@ contract DeploySentinel is Script {
         vm.startBroadcast(deployerPrivateKey);
         address deployer = vm.addr(deployerPrivateKey);
 
-        console.log("Starting SentinelShield Protocol Deployment");
+        console.log("Starting SentinelShield Protocol Deployment on Base Mainnet");
         console.log("Deployer Account Authority:", deployer);
 
         // 1. RiskRegistry Deployment Phase
@@ -49,7 +49,7 @@ contract DeploySentinel is Script {
         PolicyNFT nft = new PolicyNFT();
         console.log("Contract deployed: PolicyNFT at", address(nft));
 
-        // 4. Asset Underwriting Liquidity Infrastructure Phase
+        // 4. Asset Underwriting Liquidity Infrastructure Phase (Triggers ERC-4626 Base Strategy)
         CoveragePool pool = new CoveragePool(usdc, aavePool, aUsdc);
         console.log("Contract deployed: CoveragePool at", address(pool));
 
@@ -65,12 +65,13 @@ contract DeploySentinel is Script {
         PayoutExecutor executor = new PayoutExecutor(address(governor), address(engine), address(pool));
         console.log("Contract deployed: PayoutExecutor at", address(executor));
 
-        // 8. Emergency System Infrastructure Deployment Phase
+        // 8. Emergency System Infrastructure Deployment Phase (Veto Council Matrix)
         address[] memory guardians = new address[](3);
         guardians[0] = deployer;
-        // Fix: Use recognizable distinct public keys or real staging addresses for your multi-sig matrix
-        guardians[1] = address(0x1111111111111111111111111111111111111111); 
-        guardians[2] = address(0x2222222222222222222222222222222222222222); 
+        // Production Note: Replace these placeholder addresses with your real multi-sig signers or safe cold wallets!
+        guardians[1] = address(0x3333333333333333333333333333333333333333); 
+        guardians[2] = address(0x4444444444444444444444444444444444444444); 
+        
         VetoCouncil vetoCouncil = new VetoCouncil(address(governor), guardians, 2);
         console.log("Contract deployed: VetoCouncil at", address(vetoCouncil));
 

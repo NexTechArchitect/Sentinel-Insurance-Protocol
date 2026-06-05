@@ -1,20 +1,20 @@
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-import { sepolia } from 'wagmi/chains';
+import { base } from 'wagmi/chains';
 import { http, fallback } from 'wagmi';
 
-const ALCHEMY = process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL;
+const BASE_RPC = process.env.NEXT_PUBLIC_BASE_RPC_URL;
 
 export const config = getDefaultConfig({
   appName: 'SentinelShield Insurance Protocol',
   projectId: process.env.NEXT_PUBLIC_PROJECT_ID || 'dummy-id-fallback',
-  chains: [sepolia],
+  chains: [base],
   transports: {
-    [sepolia.id]: fallback([
-      ...(ALCHEMY ? [http(ALCHEMY)] : []),
-      http('https://ethereum-sepolia-rpc.publicnode.com'),
-      http('https://sepolia.drpc.org'),
-      http('https://rpc.sepolia.org'),
-      http('https://rpc2.sepolia.org'),
+    [base.id]: fallback([
+      ...(BASE_RPC ? [http(BASE_RPC)] : []),
+      http('https://mainnet.base.org'), 
+      http('https://rpc.ankr.com/base'),
+      http('https://1rpc.io/base'),
+      http('https://base.meowrpc.com'),
     ]),
   },
   ssr: true,
