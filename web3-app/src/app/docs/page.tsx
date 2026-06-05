@@ -8,9 +8,9 @@ import Link from 'next/link';
 const CONTRACTS = [
   {
     num: '01', name: 'PolicyEngine', tag: 'CEI · NonReentrant', color: '#ffc676',
-    addr: '0xa373BD4d832E34C960A7bF6BBf6190c939932b40',
-    short: '0xa373…b40',
-    etherscan: 'https://sepolia.etherscan.io/address/0xa373BD4d832E34C960A7bF6BBf6190c939932b40',
+    addr: '0xEF80cd6370D4619D2f71BD4000a4757357Be5564',
+    short: '0xEF80…5564',
+    etherscan: 'https://basescan.org/address/0xEF80cd6370D4619D2f71BD4000a4757357Be5564',
     icon: '⚙️',
     heading: 'The brain of policy issuance',
     body: `PolicyEngine is the central orchestration hub of SentinelShield. Every time a user buys coverage, this contract runs the entire atomic transaction — it validates the protocol against the RiskRegistry, checks that the pool has sufficient free liquidity, calculates the exact premium via PremiumMath, pulls USDC from the buyer, routes it to the CoveragePool as yield, locks the coverage collateral, and mints a soulbound PolicyNFT to the buyer's wallet — all within a single EVM execution frame that either succeeds completely or reverts cleanly. The payable modifier is present purely to bypass an EVM gas optimisation constraint; no ETH is ever accepted.`,
@@ -18,19 +18,19 @@ const CONTRACTS = [
   },
   {
     num: '02', name: 'CoveragePool', tag: 'ERC-4626 · Aave V3', color: '#58daff',
-    addr: '0x2bC42ae97A20b4f06F35C42e2Fb82A0550fAAf18',
-    short: '0x2bC4…f18',
-    etherscan: 'https://sepolia.etherscan.io/address/0x2bC42ae97A20b4f06F35C42e2Fb82A0550fAAf18',
+    addr: '0x374d949c7A575212d423Ecc0e765a59664d7C3eD',
+    short: '0x374d…c3eD',
+    etherscan: 'https://basescan.org/address/0x374d949c7A575212d423Ecc0e765a59664d7C3eD',
     icon: '🏦',
     heading: 'The capital vault',
-    body: `CoveragePool is where the money lives. It is a fully ERC-4626 compliant vault with one critical modification: every deposit is immediately forwarded to Aave V3, where it earns continuous yield for liquidity providers. The vault tracks two separate buckets of USDC — "free" liquidity that is available for new policies or LP withdrawals, and "locked" liquidity that has been reserved as collateral for active policies. These two buckets are enforced at the mathematical level: the _withdraw hook reverts if a withdrawal would eat into locked collateral.`,
+    body: `CoveragePool is where the money lives. It is a fully ERC-4626 compliant vault with one critical modification: every deposit is immediately forwarded to Aave V3 Base Core, where it earns continuous yield for liquidity providers. The vault tracks two separate buckets of USDC — "free" liquidity that is available for new policies or LP withdrawals, and "locked" liquidity that has been reserved as collateral for active policies. These two buckets are enforced at the mathematical level: the _withdraw hook reverts if a withdrawal would eat into locked collateral.`,
     detail: `The decimals offset of 6 is a deliberate inflation-attack mitigation. Since USDC only has 6 decimals, the vault applies a 10^6 virtual share multiplier so that the first depositor cannot manipulate the share price by donating dust. This is OpenZeppelin's recommended approach for ERC-4626 vaults with low-decimal underlying assets.`,
   },
   {
     num: '03', name: 'RiskRegistry', tag: 'Ownable2Step · Pausable', color: '#c484ff',
-    addr: '0xE94a55ac7678013ff68B8c26A3337A0DCe7a5210',
-    short: '0xE94a…210',
-    etherscan: 'https://sepolia.etherscan.io/address/0xE94a55ac7678013ff68B8c26A3337A0DCe7a5210',
+    addr: '0x049C2eC773cDa5F3a19F9cc7C67D3331C21853DB',
+    short: '0x049C…53DB',
+    etherscan: 'https://basescan.org/address/0x049C2eC773cDa5F3a19F9cc7C67D3331C21853DB',
     icon: '📋',
     heading: 'The source of truth for risk',
     body: `RiskRegistry is the on-chain database that defines what can be insured and at what cost. Every protocol that SentinelShield covers must be registered here with a risk score between 0 and 100, an audit status flag, and a coverage cap. The risk score directly feeds into PremiumMath — a protocol scoring 80 pays a premium roughly 2.6x higher than one scoring 30. The audit status gives a flat 20% discount on top of the risk-score calculation. The coverage cap prevents any single protocol from consuming the entire pool.`,
@@ -38,9 +38,9 @@ const CONTRACTS = [
   },
   {
     num: '04', name: 'ClaimsGovernor', tag: 'Snapshot Voting · Flash-Loan Resistant', color: '#ff687c',
-    addr: '0xDc89D29Dc89178bE772EAf6E3587eB863Df6Ae8a',
-    short: '0xDc89…Ae8a',
-    etherscan: 'https://sepolia.etherscan.io/address/0xDc89D29Dc89178bE772EAf6E3587eB863Df6Ae8a',
+    addr: '0xB7939f8b41C932595cf358842BC63AFE221D2Ba3',
+    short: '0xB793…2Ba3',
+    etherscan: 'https://basescan.org/address/0xB7939f8b41C932595cf358842BC63AFE221D2Ba3',
     icon: '⚖️',
     heading: 'The adjudication machine',
     body: `ClaimsGovernor is where a filed claim lives and dies. When a policyholder submits a claim with IPFS or Arweave evidence, the contract takes an immutable snapshot of SHIELD token balances at block.number - 1. This historical checkpoint is the key flash-loan defence: any attacker who borrows SHIELD tokens in the same block as the claim filing will find their borrowed balance was not present at the snapshot block and therefore carries zero voting weight. The 7-day voting window then opens, during which any wallet with historical SHIELD balance can cast a token-weighted vote.`,
@@ -48,9 +48,9 @@ const CONTRACTS = [
   },
   {
     num: '05', name: 'ShieldToken', tag: 'ERC-20Votes · EIP-712', color: '#4af5b2',
-    addr: '0x3D202f0Af4614DA97eDeC5326c585b9C6E29d4AF',
-    short: '0x3D20…4AF',
-    etherscan: 'https://sepolia.etherscan.io/address/0x3D202f0Af4614DA97eDeC5326c585b9C6E29d4AF',
+    addr: '0xafE2B560ad1743DA67BdA1850aF47CdB2280a2d1',
+    short: '0xafE2…a2d1',
+    etherscan: 'https://basescan.org/address/0xafE2B560ad1743DA67BdA1850aF47CdB2280a2d1',
     icon: '🛡️',
     heading: 'The governance token',
     body: `ShieldToken ($SHIELD) is the voting backbone of the entire protocol. It implements ERC20Votes — the OpenZeppelin extension that enables historical balance checkpointing — which is what makes flash-loan-resistant governance possible. Holders must delegate their votes to themselves or another address before their balance counts. This is a standard ERC-20Votes requirement: holding tokens without delegating means zero voting power. The token is capped at 100 million SHIELD total supply with no inflation mechanic — only the owner can mint, and only up to the hardcoded cap.`,
@@ -58,9 +58,9 @@ const CONTRACTS = [
   },
   {
     num: '06', name: 'VetoCouncil', tag: 'M-of-N Multisig · Emergency Circuit', color: '#ffae48',
-    addr: '0x00493Da33899ea9FB9Fe5401dDa9EcE7F92319Ab',
-    short: '0x0049…9Ab',
-    etherscan: 'https://sepolia.etherscan.io/address/0x00493Da33899ea9FB9Fe5401dDa9EcE7F92319Ab',
+    addr: '0x896627825AEAc934e4CAec4cb00EC8B90a5292B0',
+    short: '0x8966…92B0',
+    etherscan: 'https://basescan.org/address/0x896627825AEAc934e4CAec4cb00EC8B90a5292B0',
     icon: '🔒',
     heading: 'The emergency safety valve',
     body: `VetoCouncil is the last line of defence against sophisticated governance attacks or fraudulent claims that somehow acquired enough SHIELD votes to pass. It implements an M-of-N multisignature pattern: a configurable set of guardians can each sign a veto proposal for any pending claim, and once the signature count meets the threshold, the veto is automatically executed against ClaimsGovernor. Crucially, a veto can only be applied while a claim is still PENDING — it cannot retroactively undo an already-executed payout. This makes the VetoCouncil a circuit breaker, not a rug mechanism.`,
@@ -68,9 +68,9 @@ const CONTRACTS = [
   },
   {
     num: '07', name: 'PolicyNFT', tag: 'ERC-5484 Soulbound · On-chain SVG', color: '#b2c6ff',
-    addr: '0xbB6314f9775209e0999280BFE7e7A316ADc5b75C',
-    short: '0xbB63…b75C',
-    etherscan: 'https://sepolia.etherscan.io/address/0xbB6314f9775209e0999280BFE7e7A316ADc5b75C',
+    addr: '0x02A9E50D9EB6fec67c419C5ddb3ffd894DD01C00',
+    short: '0x02A9…1C00',
+    etherscan: 'https://basescan.org/address/0x02A9E50D9EB6fec67c419C5ddb3ffd894DD01C00',
     icon: '🖼️',
     heading: 'The soulbound policy receipt',
     body: `PolicyNFT issues one non-transferable ERC-721 token per purchased policy. The soulbound enforcement is implemented at the lowest possible level — the _update() hook in OpenZeppelin's ERC-721 v5 base. Any call that would move a token from one non-zero address to another non-zero address is unconditionally reverted. This cannot be bypassed by any external call path because _update() is the single choke point for all ERC-721 balance mutations. The token's metadata — including a rendered SVG badge showing the policy status, protocol, coverage amount, and expiry — is generated entirely in Solidity by PolicyNFTSVG and returned as a Base64 data URI directly from tokenURI().`,
@@ -78,9 +78,9 @@ const CONTRACTS = [
   },
   {
     num: '08', name: 'PayoutExecutor', tag: 'Keeper Pattern · CEI', color: '#ffec84',
-    addr: '0x004FF5Ce04AcC4106100C283edf2A69Fb879BdCb',
-    short: '0x004F…BdCb',
-    etherscan: 'https://sepolia.etherscan.io/address/0x004FF5Ce04AcC4106100C283edf2A69Fb879BdCb',
+    addr: '0x897a76eC710DC780E4627532A0e863F2672d50A7',
+    short: '0x897a…50A7',
+    etherscan: 'https://basescan.org/address/0x897a76eC710DC780E4627532A0e863F2672d50A7',
     icon: '💸',
     heading: 'The payout execution engine',
     body: `PayoutExecutor is a deliberately simple contract with exactly one job: execute a USDC payout when a claim has been formally approved by governance. It is callable by anyone — there is no privilege in triggering a payout, because the democratic process has already completed. Any keeper, bot, or manual user can call executePayout() for an APPROVED claim. The contract reads the claim from ClaimsGovernor, reads the policy details from PolicyEngine, verifies the payout amount does not exceed the locked collateral, marks the claim as EXECUTED in ClaimsGovernor first (CEI), then instructs CoveragePool to withdraw the USDC from Aave and send it directly to the claimant.`,
@@ -460,7 +460,7 @@ export default function DocsPage() {
       <section className="doc-hero">
         <div className="doc-eyebrow">
           <span className="doc-eyebrow-dot" />
-          Protocol Documentation · Ethereum Sepolia
+          Protocol Documentation · Base Mainnet
         </div>
         <h1 className="doc-title">
           What is<br />SentinelShield?
@@ -515,7 +515,7 @@ export default function DocsPage() {
       <section className="doc-section" id="problem">
         <div className="doc-section-inner">
           <div id="prob-hdr" data-reveal style={rv('prob-hdr')}>
-       
+        
             <h2 className="doc-sec-title">DeFi has no safety net.</h2>
           </div>
           <div id="prob-body" data-reveal style={rv('prob-body', 80)}>
@@ -635,7 +635,7 @@ export default function DocsPage() {
                   onMouseEnter={e=>(e.currentTarget as HTMLElement).style.background=`${c.color}1e`}
                   onMouseLeave={e=>(e.currentTarget as HTMLElement).style.background=`${c.color}0c`}>
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                  Etherscan · {c.short}
+                  Basescan · {c.short}
                 </a>
               </div>
             ))}
@@ -679,7 +679,7 @@ export default function DocsPage() {
       <section className="doc-section" id="validator" style={{ background:'rgba(88,218,255,0.012)' }}>
         <div className="doc-section-inner">
           <div id="val-hdr" data-reveal style={rv('val-hdr')}>
-           
+            
             <h2 className="doc-sec-title">The rules of valid claims.</h2>
           </div>
           <div id="val-body" data-reveal style={rv('val-body', 80)}>
@@ -845,7 +845,7 @@ export default function DocsPage() {
             <div style={{ padding:'clamp(14px,2.5vw,18px)', borderRadius:12, background:'rgba(255,60,30,0.04)', border:'1px dashed rgba(255,80,50,0.22)' }}>
               <div style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:'clamp(7px,1.2vw,9px)', fontWeight:700, letterSpacing:'0.15em', textTransform:'uppercase', color:'rgba(255,100,70,0.6)', marginBottom:8 }}>⚠ Audit Disclaimer</div>
               <p style={{ fontSize:'clamp(12px,1.4vw,14px)', color:'rgba(180,210,255,0.45)', lineHeight:1.72 }}>
-                These contracts implement production-grade security patterns and were self-audited by the author using Slither and manual review. They have not undergone a formal external security audit by a professional firm. Do not deploy to mainnet with material funds without engaging a qualified smart contract auditing firm. This is a testnet deployment on Ethereum Sepolia.
+                These contracts implement production-grade security patterns and were self-audited by the author using Slither and manual review. They have not undergone a formal external security audit by a professional firm. Do not deploy to mainnet with material funds without engaging a qualified smart contract auditing firm. This is a production deployment on Base Mainnet.
               </p>
             </div>
           </div>
@@ -854,26 +854,26 @@ export default function DocsPage() {
 
       <div className="doc-divider" />
 
-     
+      
       <section className="doc-section" id="deployed">
         <div className="doc-section-wide">
           <div id="dep-hdr" data-reveal style={{ marginBottom:clamp(24,36), ...rv('dep-hdr') }}>
          
-            <h2 className="doc-sec-title">Live on Ethereum Sepolia.</h2>
-            <p className="doc-body" style={{ maxWidth:520, marginTop:12 }}>All contracts are verified and publicly readable on Etherscan. Interact with proxy addresses where applicable.</p>
+            <h2 className="doc-sec-title">Live on Base Mainnet.</h2>
+            <p className="doc-body" style={{ maxWidth:520, marginTop:12 }}>All contracts are verified and publicly readable on Basescan. Interact with proxy addresses where applicable.</p>
           </div>
           <div>
             {[
-              { name:'PolicyEngine',   addr:'0xa373BD4d832E34C960A7bF6BBf6190c939932b40', color:'#ffc676', role:'Core' },
-              { name:'CoveragePool',   addr:'0x2bC42ae97A20b4f06F35C42e2Fb82A0550fAAf18', color:'#58daff', role:'Core' },
-              { name:'RiskRegistry',   addr:'0xE94a55ac7678013ff68B8c26A3337A0DCe7a5210', color:'#c484ff', role:'Core' },
-              { name:'ClaimsGovernor', addr:'0xDc89D29Dc89178bE772EAf6E3587eB863Df6Ae8a', color:'#ff687c', role:'Governance' },
-              { name:'ShieldToken ($SHIELD)', addr:'0x3D202f0Af4614DA97eDeC5326c585b9C6E29d4AF', color:'#4af5b2', role:'Governance' },
-              { name:'VetoCouncil',    addr:'0x00493Da33899ea9FB9Fe5401dDa9EcE7F92319Ab', color:'#ffae48', role:'Governance' },
-              { name:'PolicyNFT',      addr:'0xbB6314f9775209e0999280BFE7e7A316ADc5b75C', color:'#b2c6ff', role:'Token' },
-              { name:'PayoutExecutor', addr:'0x004FF5Ce04AcC4106100C283edf2A69Fb879BdCb', color:'#ffec84', role:'Execution' },
-              { name:'Circle USDC (Collateral)', addr:'0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8', color:'rgba(180,210,255,0.5)', role:'External' },
-              { name:'Aave V3 Pool (Sepolia)',   addr:'0x6Ae43d3271ff6888e7Fc43Fd7321a503ff738951', color:'rgba(180,210,255,0.35)', role:'External' },
+              { name:'PolicyEngine',  addr:'0xEF80cd6370D4619D2f71BD4000a4757357Be5564', color:'#ffc676', role:'Core' },
+              { name:'CoveragePool',  addr:'0x374d949c7A575212d423Ecc0e765a59664d7C3eD', color:'#58daff', role:'Core' },
+              { name:'RiskRegistry',  addr:'0x049C2eC773cDa5F3a19F9cc7C67D3331C21853DB', color:'#c484ff', role:'Core' },
+              { name:'ClaimsGovernor', addr:'0xB7939f8b41C932595cf358842BC63AFE221D2Ba3', color:'#ff687c', role:'Governance' },
+              { name:'ShieldToken ($SHIELD)', addr:'0xafE2B560ad1743DA67BdA1850aF47CdB2280a2d1', color:'#4af5b2', role:'Governance' },
+              { name:'VetoCouncil',    addr:'0x896627825AEAc934e4CAec4cb00EC8B90a5292B0', color:'#ffae48', role:'Governance' },
+              { name:'PolicyNFT',      addr:'0x02A9E50D9EB6fec67c419C5ddb3ffd894DD01C00', color:'#b2c6ff', role:'Token' },
+              { name:'PayoutExecutor', addr:'0x897a76eC710DC780E4627532A0e863F2672d50A7', color:'#ffec84', role:'Execution' },
+              { name:'Circle USDC (Collateral)', addr:'0x833589fCD6eDb6E08f4c7C32D4f71b54bda02913', color:'rgba(180,210,255,0.5)', role:'External' },
+              { name:'Aave V3 Pool (Base Core)',   addr:'0xA238Dd80C259b705191C65851448bB1e2D3b3790', color:'rgba(180,210,255,0.35)', role:'External' },
             ].map((item, i) => (
               <div key={item.name} id={`da${i}`} data-reveal className="doc-addr-row"
                 style={rv(`da${i}`, i * 40)}>
@@ -881,7 +881,7 @@ export default function DocsPage() {
                 <div className="doc-addr-name">{item.name}</div>
                 <div style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:'clamp(7px,1vw,9px)', fontWeight:700, letterSpacing:'0.08em', color:`${item.color}70`, flexShrink:0, padding:'2px 8px', borderRadius:5, background:`${item.color}0e` }}>{item.role}</div>
                 <div className="doc-addr-hash">{item.addr}</div>
-                <a href={`https://sepolia.etherscan.io/address/${item.addr}`} target="_blank" rel="noopener noreferrer" className="doc-addr-link">Etherscan ↗</a>
+                <a href={`https://basescan.org/address/${item.addr}`} target="_blank" rel="noopener noreferrer" className="doc-addr-link">Basescan ↗</a>
               </div>
             ))}
           </div>
@@ -895,7 +895,7 @@ export default function DocsPage() {
         <div id="cta-block" data-reveal style={{ maxWidth:500, margin:'0 auto', ...rv('cta-block') }}>
           <div style={{ fontSize:clamp(32,44), marginBottom:18, display:'inline-block' }}>◆</div>
           <h2 className="doc-cta-title">Ready to use<br />the protocol?</h2>
-          <p className="doc-cta-body">Connect your wallet, purchase coverage, or provide liquidity. Everything runs on Ethereum Sepolia.</p>
+          <p className="doc-cta-body">Connect your wallet, purchase coverage, or provide liquidity. Everything runs on Base Mainnet.</p>
           <div className="doc-cta-btns">
             <Link href="/buy-policy" className="doc-btn doc-btn-primary">Buy Coverage →</Link>
             <Link href="/pool" className="doc-btn doc-btn-ghost">Provide Liquidity</Link>
@@ -905,7 +905,7 @@ export default function DocsPage() {
             </a>
           </div>
           <p style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:'clamp(7px,1.2vw,8px)', color:'rgba(88,218,255,0.22)', marginTop:20, letterSpacing:'0.14em', textTransform:'uppercase' }}>
-            Sepolia Testnet · MIT License · Built by NexTech Architect
+            Base Mainnet · MIT License · Built by NexTech Architect
           </p>
         </div>
       </section>
@@ -918,9 +918,9 @@ export default function DocsPage() {
           <Link href="/buy-policy" className="doc-footer-link">Coverage</Link>
           <Link href="/governance" className="doc-footer-link">Governance</Link>
           <a href="https://github.com/NexTechArchitect/Sentinel-Insurance-Protocol" target="_blank" rel="noopener noreferrer" className="doc-footer-link">GitHub</a>
-          <a href="https://faucet.circle.com/" target="_blank" rel="noopener noreferrer" className="doc-footer-link">Faucet</a>
+          <a href="https://bridge.base.org/" target="_blank" rel="noopener noreferrer" className="doc-footer-link">Bridge</a>
         </nav>
-        <span style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:'clamp(7px,1.2vw,9px)', color:'rgba(180,210,255,0.2)', letterSpacing:'0.1em' }}>Ethereum Sepolia</span>
+        <span style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:'clamp(7px,1.2vw,9px)', color:'rgba(180,210,255,0.2)', letterSpacing:'0.1em' }}>Base Mainnet</span>
       </footer>
     </>
   );
