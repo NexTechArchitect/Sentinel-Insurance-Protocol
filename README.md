@@ -29,17 +29,18 @@
 
 ---
 
-## 🎯 What Makes SentinelShield Different
+## 🎯 The Problem & The Sentinel Solution
 
-Most decentralized insurance protocols suffer from idle capital inefficiency and centralized claim adjudication. SentinelShield eliminates these bottlenecks through native ERC-4626 vault yield strategies, an immutable DAO governance pipeline, and a robust Next.js frontend operating efficiently on Base Mainnet.
+Traditional decentralized insurance protocols face three critical bottlenecks: **severe capital inefficiency** (locking collateral without yield), **centralized claim adjudication** (relying on single points of failure), and **vulnerability to flash-loan governance attacks**. 
 
-| Architectural Challenge | The Sentinel Protocol Solution |
-|:---|:---|
-| **Capital Inefficiency (Idle TVL)** | `CoveragePool` implements ERC-4626, natively routing idle Native Circle USDC into Aave V3 Base Core to generate continuous APY for liquidity providers. |
-| **Flash-Loan Voting Attacks** | `ClaimsGovernor` enforces historical checkpoint tracking (`block.number - 1`) ensuring only true long-term holders can vote on claim payouts. |
-| **Centralized Claim Adjudication** | Fully decentralized outcome resolution. Claims are subjected to a strict 7-day token-weighted consensus voting window via the UI. |
-| **Emergency Systemic Failures** | A secure `VetoCouncil` multisig serves as a structural safety valve to reject provably fraudulent claims without disrupting honest voters. |
-| **Position Portability** | Active insurance policies are minted as dynamic `PolicyNFTs` (ERC-721), with 100% on-chain SVG art reflecting live policy states. |
+SentinelShield fundamentally re-architects this model.
+
+| The Core Problem | The Sentinel Solution |
+| :--- | :--- |
+| **Capital Inefficiency (Idle TVL)**<br>Locked collateral sits idle, creating a massive opportunity cost for liquidity providers. | **Automated Yield Routing**<br>`CoveragePool` implements an ERC-4626 vault architecture, natively routing idle USDC into the Aave V3 Base Core to generate continuous APY, ensuring zero capital drag. |
+| **Governance Manipulation**<br>Whales use flash-loans to borrow tokens, pass malicious claims, and dump the tokens in a single block. | **Flash-Resistant DAO Consensus**<br>`ClaimsGovernor` enforces strict `block.number - 1` snapshot voting, ensuring only genuine, long-term $SHIELD holders can influence claim adjudication. |
+| **Centralized Points of Failure**<br>Protocols rely on centralized oracles or a small multi-sig board to approve user payouts. | **Decentralized Adjudication Engine**<br>Claims undergo a strict 7-day token-weighted public consensus window. A multi-sig `VetoCouncil` exists *only* as a structural safety valve against systemic fraud, not for standard approvals. |
+| **Illiquid & Static Policies**<br>Insurance receipts are non-transferable data points hidden in contract state. | **Dynamic On-Chain NFT Portfolios**<br>Active policies are minted as fully transferable ERC-721 `PolicyNFTs` with dynamically generated SVG art reflecting real-time coverage states directly on-chain. |
 
 ---
 
@@ -97,7 +98,7 @@ All core systems are actively deployed, strictly wired, and cryptographically ve
 
 | Component | Address | Explorer Link |
 | --- | --- | --- |
-| **PolicyEngine** | `0xEF80cd6370D4619D2f71BD4000a4757357Be5564` | [View on Basescan ↗](https://www.google.com/url?sa=E&source=gmail&q=https://basescan.org/address/0xEF80cd6370D4619D2f71BD4000a4757357Be5564) |
+| **PolicyEngine** | `0xEF80cd6370D4619D2f71BD4000a4757357Be5564` | [View on Basescan ↗](https://basescan.org/address/0xEF80cd6370D4619D2f71BD4000a4757357Be5564) |
 | **CoveragePool** | `0x374d949c7A575212d423Ecc0e765a59664d7C3eD` | [View on Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0x374d949c7A575212d423Ecc0e765a59664d7C3eD) |
 | **ClaimsGovernor** | `0xB7939f8b41C932595cf358842BC63AFE221D2Ba3` | [View on Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0xB7939f8b41C932595cf358842BC63AFE221D2Ba3) |
 | **VetoCouncil** | `0x896627825AEAc934e4CAec4cb00EC8B90a5292B0` | [View on Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0x896627825AEAc934e4CAec4cb00EC8B90a5292B0) |
@@ -172,10 +173,6 @@ npm run dev
 
 ---
 
+**SentinelShield Protocol** *Engineered for the Decentralized Frontier.*
 
-<div align="center">
-*Engineered for the Decentralized Frontier.*
-
-Architected by **NexTechArchitect**
-
-Smart Contract Engineer & Full-Stack Web3 Developer
+Architected by **NexTechArchitect** Smart Contract Engineer & Full-Stack Web3 Developer
