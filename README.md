@@ -1,28 +1,29 @@
+
 <div align="center">
 
 <img src="https://img.shields.io/badge/🛡️-Sentinel_Insurance_Protocol-2563EB?style=for-the-badge&labelColor=0f172a&color=2563EB" height="36"/>
 
 # Decentralized On-Chain Insurance Infrastructure
-### Ethereum Sepolia · ERC-4626 Yield Routing · DAO Adjudication · Next.js 3D Engine 
+### Base Mainnet · ERC-4626 Yield Routing · DAO Adjudication · Next.js 3D Engine 
 <br>
  
-[![Live App](https://img.shields.io/badge/Live_App-Vercel-000000?style=flat-square&logo=vercel)](https://sentinel-insurance-protocol.vercel.app/)
-[![License](https://img.shields.io/badge/License-MIT-22c55e?style=flat-square)](https://opensource.org/licenses/MIT)
+[![Live App](https://img.shields.io/badge/Production-Live_App-22c55e?style=flat-square&logo=vercel)](https://sentinel-insurance-protocol.vercel.app/)
+[![Network](https://img.shields.io/badge/Network-Base_Mainnet-0052FF?style=flat-square&logo=base)](https://basescan.org/)
 [![Foundry](https://img.shields.io/badge/Contracts-Foundry-F0B90B?style=flat-square)](https://book.getfoundry.sh/)
 [![Frontend](https://img.shields.io/badge/Frontend-Next.js_14-000000?style=flat-square&logo=next.js)](https://nextjs.org/)
 
 <br> 
 
 > **A highly modular, security-first DeFi insurance architecture.** <br>
-> Token-weighted consensus adjudication, automated capital optimization via Aave V3, and flash-loan resistant governance voting—wrapped in a high-performance WebGL 3D interface.
+> Token-weighted consensus adjudication, automated capital optimization via Aave V3, and flash-loan resistant governance voting—wrapped in a high-performance WebGL 3D interface. Securing real-world assets on the Base Layer-2 ecosystem.
 
 <br>
 
 <h3><a href="https://sentinel-insurance-protocol.vercel.app/">🚀 Launch Live Application</a></h3>
 
 <a href="https://github.com/NexTechArchitect/Sentinel-Insurance-Protocol">💻 Source Code</a> &nbsp;·&nbsp;
-<a href="https://sepolia.etherscan.io/address/0xa373BD4d832E34C960A7bF6BBf6190c939932b40">🔗 Core Contract</a> &nbsp;·&nbsp;
-<a href="https://faucet.circle.com/">🚰 Sepolia Faucet</a>
+<a href="https://basescan.org/address/0xEF80cd6370D4619D2f71BD4000a4757357Be5564">🔗 Core Contract</a> &nbsp;·&nbsp;
+<a href="https://docs.base.org/">📘 Base Ecosystem</a>
 
 </div>
 
@@ -30,11 +31,11 @@
 
 ## 🎯 What Makes SentinelShield Different
 
-Most decentralized insurance protocols suffer from idle capital inefficiency and centralized claim adjudication. SentinelShield eliminates these bottlenecks through native ERC-4626 vault yield strategies, an immutable DAO governance pipeline, and a robust Next.js frontend.
+Most decentralized insurance protocols suffer from idle capital inefficiency and centralized claim adjudication. SentinelShield eliminates these bottlenecks through native ERC-4626 vault yield strategies, an immutable DAO governance pipeline, and a robust Next.js frontend operating efficiently on Base Mainnet.
 
 | Architectural Challenge | The Sentinel Protocol Solution |
 |:---|:---|
-| **Capital Inefficiency (Idle TVL)** | `CoveragePool` implements ERC-4626, natively routing idle USDC collateral into Aave V3 to generate continuous APY for liquidity providers. |
+| **Capital Inefficiency (Idle TVL)** | `CoveragePool` implements ERC-4626, natively routing idle Native Circle USDC into Aave V3 Base Core to generate continuous APY for liquidity providers. |
 | **Flash-Loan Voting Attacks** | `ClaimsGovernor` enforces historical checkpoint tracking (`block.number - 1`) ensuring only true long-term holders can vote on claim payouts. |
 | **Centralized Claim Adjudication** | Fully decentralized outcome resolution. Claims are subjected to a strict 7-day token-weighted consensus voting window via the UI. |
 | **Emergency Systemic Failures** | A secure `VetoCouncil` multisig serves as a structural safety valve to reject provably fraudulent claims without disrupting honest voters. |
@@ -45,7 +46,7 @@ Most decentralized insurance protocols suffer from idle capital inefficiency and
 ## 📑 Table of Contents
 
 1. [🏛️ Protocol Architecture](#-protocol-architecture)
-2. [✅ Deployed Infrastructure (Sepolia)](#-deployed-infrastructure-sepolia)
+2. [✅ Deployed Infrastructure (Base Mainnet)](#-deployed-infrastructure-base-mainnet)
 3. [📁 Full-Stack Codebase Structure](#-full-stack-codebase-structure)
 4. [🧩 Contract Reference](#-contract-reference)
 5. [🛡️ Security & Audit Profile](#-security--audit-profile)
@@ -82,39 +83,40 @@ The system operates across three isolated execution layers governed by a unified
 │  Unlocks CoveragePool liquidity upon successful consensus vote   │
 └──────────────────────────────────────────────────────────────────┘
 
+
 ```
 
 ---
 
-## ✅ Deployed Infrastructure (Sepolia)
+## ✅ Deployed Infrastructure (Base Mainnet)
 
-All core systems are actively deployed, strictly wired, and cryptographically verified on **Ethereum Sepolia**.
+All core systems are actively deployed, strictly wired, and cryptographically verified on **Base Mainnet**, handling live USDC assets.
 
 ### Core Engine & Vaults
 
 | Component | Address | Explorer |
 | --- | --- | --- |
-| **PolicyEngine** | `0xa373BD4d832E34C960A7bF6BBf6190c939932b40` | [Etherscan ↗](https://www.google.com/url?sa=E&source=gmail&q=https://sepolia.etherscan.io/address/0xa373BD4d832E34C960A7bF6BBf6190c939932b40) |
-| **CoveragePool** | `0x2bC42ae97A20b4f06F35C42e2Fb82A0550fAAf18` | [Etherscan ↗](https://www.google.com/search?q=https://sepolia.etherscan.io/address/0x2bC42ae97A20b4f06F35C42e2Fb82A0550fAAf18) |
-| **RiskRegistry** | `0xE94a55ac7678013ff68B8c26A3337A0DCe7a5210` | [Etherscan ↗](https://www.google.com/search?q=https://sepolia.etherscan.io/address/0xE94a55ac7678013ff68B8c26A3337A0DCe7a5210) |
+| **PolicyEngine** | `0xEF80cd6370D4619D2f71BD4000a4757357Be5564` | [Basescan ↗](https://www.google.com/url?sa=E&source=gmail&q=https://basescan.org/address/0xEF80cd6370D4619D2f71BD4000a4757357Be5564) |
+| **CoveragePool** | `0x374d949c7A575212d423Ecc0e765a59664d7C3eD` | [Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0x374d949c7A575212d423Ecc0e765a59664d7C3eD) |
+| **RiskRegistry** | `0x049C2eC773cDa5F3a19F9cc7C67D3331C21853DB` | [Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0x049C2eC773cDa5F3a19F9cc7C67D3331C21853DB) |
 
 ### Governance & Adjudication
 
 | Component | Address | Explorer |
 | --- | --- | --- |
-| **ClaimsGovernor** | `0xDc89D29Dc89178bE772EAf6E3587eB863Df6Ae8a` | [Etherscan ↗](https://www.google.com/search?q=https://sepolia.etherscan.io/address/0xDc89D29Dc89178bE772EAf6E3587eB863Df6Ae8a) |
-| **ShieldToken ($SHIELD)** | `0x3D202f0Af4614DA97eDeC5326c585b9C6E29d4AF` | [Etherscan ↗](https://www.google.com/search?q=https://sepolia.etherscan.io/address/0x3D202f0Af4614DA97eDeC5326c585b9C6E29d4AF) |
-| **PayoutExecutor** | `0x004FF5Ce04AcC4106100C283edf2A69Fb879BdCb` | [Etherscan ↗](https://www.google.com/search?q=https://sepolia.etherscan.io/address/0x004FF5Ce04AcC4106100C283edf2A69Fb879BdCb) |
-| **VetoCouncil** | `0x00493Da33899ea9FB9Fe5401dDa9EcE7F92319Ab` | [Etherscan ↗](https://www.google.com/search?q=https://sepolia.etherscan.io/address/0x00493Da33899ea9FB9Fe5401dDa9EcE7F92319Ab) |
+| **ClaimsGovernor** | `0xB7939f8b41C932595cf358842BC63AFE221D2Ba3` | [Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0xB7939f8b41C932595cf358842BC63AFE221D2Ba3) |
+| **ShieldToken ($SHIELD)** | `0xafE2B560ad1743DA67BdA1850aF47CdB2280a2d1` | [Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0xafE2B560ad1743DA67BdA1850aF47CdB2280a2d1) |
+| **PayoutExecutor** | `0x897a76eC710DC780E4627532A0e863F2672d50A7` | [Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0x897a76eC710DC780E4627532A0e863F2672d50A7) |
+| **VetoCouncil** | `0x896627825AEAc934e4CAec4cb00EC8B90a5292B0` | [Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0x896627825AEAc934e4CAec4cb00EC8B90a5292B0) |
+| **PolicyNFT (Receipts)** | `0x02A9E50D9EB6fec67c419C5ddb3ffd894DD01C00` | [Basescan ↗](https://www.google.com/search?q=https://basescan.org/address/0x02A9E50D9EB6fec67c419C5ddb3ffd894DD01C00) |
 
-### Tokens & Integrations
+### Verified External Integrations
 
-| Asset | Address |
+| Asset / Protocol | Base Mainnet Address |
 | --- | --- |
-| **PolicyNFT (Receipts)** | `0xbB6314f9775209e0999280BFE7e7A316ADc5b75C` |
-| **Circle USDC** | `0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8` |
-| **Aave V3 Pool** | `0x6Ae43d3271ff6888e7Fc43Fd7321a503ff738951` |
-| **Aave aUSDC** | `0x16dA455C6e21E90E9e1554a93A0aA8435d038290` |
+| **Native Circle USDC** | `0x833589fCD6eDb6E08f4c7C32D4f71b54bda02913` |
+| **Aave V3 Base Core Pool** | `0xA238Dd80C259b705191C65851448bB1e2D3b3790` |
+| **Aave Base aUSDC** | `0x724dc807b0491c6b13239c33e2182c40c741ea1c` |
 
 ---
 
@@ -183,22 +185,22 @@ A multi-signature threshold contract acting as a final fail-safe mechanism. Auth
 
 ---
 
-## 🛡️ Security & Audit Profile
+## 🛡️ Security & Audit Profile (Production Ready)
 
 **Audit Engine:** Slither v0.10.x Static Analyzer
 
-**Framework Integration:** Foundry (Forge Artifact Matrix)
+**Framework Integration:** Foundry (Forge Artifact Matrix with Yul IR Optimization)
 
-**Security Status:** Approved for Production Deployment (✅ 100% Cleared)
+**Security Status:** Deployed to Base Mainnet (✅ 100% Cleared)
 
 | Risk Level | Detected | Architectural Status | Remediation Action |
 | --- | --- | --- | --- |
 | 🔴 **High** | **0** | **Absolute Zero Risk** | No critical exploit windows detected. |
 | 🟡 **Medium** | **2** | **Validated Design Intent** | False Positives. Verified bypass mechanics (`payable` optimization). |
-| 🔵 **Low** | **11** | **Standard Protocol Invariants** | Safely managed via `SafeERC20` wrapper frameworks. |
+| 🔵 **Low** | **11** | **Standard Protocol Invariants** | Safely managed via strict interface wrappers. |
 | 🟢 **Info** | **16** | **Natspec Documentation** | Fully documented via structured inline signatures. |
 
-> **Defense Validation:** The static scanning analysis of the SentinelShield protocol confirms zero structural data-leakage vectors, non-reentrant state transitions, and absolute mathematical precision across internal processing paths. Low instances represent native structural properties of standard ERC-4626 and ERC-721 token patterns.
+> **Defense Validation:** The static scanning analysis of the SentinelShield protocol confirms zero structural data-leakage vectors, non-reentrant state transitions, and absolute mathematical precision across internal processing paths. Low instances represent native structural properties of standard ERC-4626 and ERC-721 token patterns. Fuzz and invariant depth configured to enterprise standards.
 
 ---
 
@@ -210,12 +212,12 @@ A multi-signature threshold contract acting as a final fail-safe mechanism. Auth
 git clone [https://github.com/NexTechArchitect/Sentinel-Insurance-Protocol.git](https://github.com/NexTechArchitect/Sentinel-Insurance-Protocol.git)
 cd Sentinel-Insurance-Protocol
 
-# Install dependencies and compile
+# Install dependencies and compile via via_ir
 forge install
 make compile
 
-# Dry-run Simulation
-make simulation
+# Mainnet Fork Simulation
+forge script script/DeploySentinel.s.sol:DeploySentinel --rpc-url [https://mainnet.base.org](https://mainnet.base.org) -vvv
 
 ```
 
@@ -227,21 +229,13 @@ cd web3-app
 # Install dependencies
 npm install
 
-# Run the local development server (localhost:3000)
+# Run the local development server (localhost:3000) synced to Base
 npm run dev
 
 ```
 
 ---
-<div align="center">
 
+**SentinelShield Protocol** *Engineered for the Decentralized Frontier.*
 
-
-**SentinelShield Protocol** 
-
-
-*Engineered for the Decentralized Frontier.*
-
-Architected by **[NexTechArchitect](https://github.com/NexTechArchitect)** 
-
-Smart Contract & Web3 Developer
+Architected by **[NexTechArchitect](https://github.com/NexTechArchitect)** Smart Contract Engineer & Full-Stack Web3 Developer
