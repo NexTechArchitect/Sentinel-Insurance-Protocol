@@ -184,9 +184,6 @@ forge script script/DeploySentinel.s.sol:DeploySentinel --rpc-url https://mainne
 cd web3-app && npm install && npm run dev
 ```
 
-
----
-
 <div align="center">
 
 Built on **Base** · Secured by **Aave V3** · Governed by **$SHIELD**
