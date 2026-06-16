@@ -22,7 +22,7 @@
 <br/>
 
 > A modular, security-first DeFi insurance protocol built on Base L2.
-> Token-weighted DAO adjudication, automated yield via Aave V3, and soulbound policy NFTs —
+> Token-weighted DAO adjudication, automated yield via Aave V3, and soulbound policy NFTs -
 > engineered to secure real-world DeFi assets against smart contract exploits.
 
 <br/>
