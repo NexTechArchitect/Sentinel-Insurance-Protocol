@@ -4,7 +4,7 @@
 
 <img src="https://img.shields.io/badge/🛡️_SENTINEL-SHIELD_PROTOCOL-6366f1?style=for-the-badge&labelColor=0f172a" height="100"/>
 
-<br/><br/>
+<br/>
 
 **Decentralized On-Chain Insurance Infrastructure**
 
