@@ -132,7 +132,7 @@ All contracts deployed, verified, and live on **Base Mainnet** (Chain ID: `8453`
 | `ShieldToken.sol` | Governance token. ERC-20 Votes + Permit + Burnable. Hard cap: 100M `$SHIELD`. Users must `delegate()` to activate voting power. |
 | `PolicyNFT.sol` | Soulbound policy receipt (ERC-5484). Fully on-chain SVG via `PolicyNFTSVG` — no IPFS dependency. ERC-4906 `MetadataUpdate` on status change. Burn-on-cancel. |
 
----
+--- 
 
 ## Security & Audit
 
