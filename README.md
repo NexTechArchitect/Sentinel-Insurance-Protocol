@@ -10,7 +10,7 @@
 
 *Base Mainnet · ERC-4626 Yield Routing · DAO Adjudication · Flash-Loan Resistant Governance*
 
-<br/>
+<br/> 
 
 [![Live App](https://img.shields.io/badge/Production-Live_App-22c55e?style=flat-square&logo=vercel&logoColor=white)](https://sentinel-insurance-protocol.vercel.app/)
 [![Network](https://img.shields.io/badge/Network-Base_Mainnet-0052FF?style=flat-square&logo=base&logoColor=white)](https://basescan.org/)
