@@ -2,7 +2,7 @@
 <div align="center">
 
 <img src="https://img.shields.io/badge/🛡️-Sentinel_Insurance_Protocol-2563EB?style=for-the-badge&labelColor=0f172a&color=2563EB" height="36"/>
-
+ 
 # Decentralized On-Chain Insurance Infrastructure
 ### Base Mainnet · ERC-4626 Yield Routing · DAO Adjudication · Next.js 3D Engine 
 <br>
