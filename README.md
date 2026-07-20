@@ -15,7 +15,7 @@
 <br> 
 
 > **A highly modular, security-first DeFi insurance architecture.** <br>
-> Token-weighted consensus adjudication, automated capital optimization via Aave V3, and flash-loan resistant governance voting—wrapped in a high-performance WebGL 3D interface. Securing real-world assets on the Base Layer-2 ecosystem.
+> Token-weighted consensus adjudication, automated capital optimization via Aave V3, and flash-loan resistant governance voting wrapped in a high-performance WebGL 3D interface. Securing real-world assets on the Base Layer-2 ecosystem.
 
 <br>
 
