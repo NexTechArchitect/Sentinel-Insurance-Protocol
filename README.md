@@ -171,8 +171,9 @@ npm run dev
 
 ```
 <div align="center">
+<br>
 
-
-**SentinelShield Protocol** *Engineered for the Decentralized Frontier.*
+**SentinelShield Protocol** 
+*Engineered for the Decentralized Frontier.*
 
 Architected by **NexTechArchitect** Smart Contract Engineer & Full-Stack Web3 Developer
