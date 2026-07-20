@@ -162,7 +162,7 @@ forge script script/DeploySentinel.s.sol:DeploySentinel --rpc-url [https://mainn
 
 ### 2. Web3 Frontend (Next.js)
 
-```bash
+bash
 cd web3-app
 npm install
 
