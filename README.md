@@ -175,5 +175,4 @@ npm run dev
 
 **SentinelShield Protocol** 
 <br>
-*Engineered for the Decentralized Frontier.*
-Architected by **NexTechArchitect** Smart Contract Engineer & Full-Stack Web3 Developer
+Architected by **NexTechArchitect** Smart Contract Engineer & Web3 Developer
