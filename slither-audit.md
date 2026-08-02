@@ -45,7 +45,7 @@
 * **Slither Flag:** `∞ Minting` (`ShieldToken`, `CoveragePool`)
 * **Technical Justification:** **Inherent Protocol Mechanism.**
 * `ShieldToken` maintains an unalterable total hard-cap configuration limit: `MAX_SUPPLY = 100_000_000e18`, constrained exclusively to authorized governance tracking.
-* `CoveragePool` utilizes a native standard ERC-4626 vault implementation where shares are algorithmically minted in a strict 1:1 asset reserve ratio—tokens are only generated when real underlying capital deposits enter the vault pool.
+* `CoveragePool` utilizes a native standard ERC-4626 vault implementation where shares are algorithmically minted in a strict 1:1 asset reserve ratio-tokens are only generated when real underlying capital deposits enter the vault pool.
 
 
 
