@@ -273,28 +273,28 @@ contract ClaimsGovernor is IClaimsGovernor, ReentrancyGuard, Ownable2Step, Pausa
      * @param  claimId Unique index pointer of the concluded claim processing block.
      */
     function finalizeClaim(uint256 claimId) external nonReentrant {
-        Claim storage c = s_claims[claimId];
+    Claim storage c = s_claims[claimId];
 
-        if (c.status != ClaimStatus.PENDING || block.timestamp < c.votingEndsAt) {
-            revert IClaimsGovernor__CannotFinalize(claimId);
-        }
-
-        uint256 totalSupply = i_shieldToken.totalSupply();
-        bool approved = ClaimValidator.isClaimApproved(
-            c.yesVotes,
-            c.noVotes,
-            totalSupply
-        );
-
-        if (approved) {
-            c.status = ClaimStatus.APPROVED;
-            i_policyEngine.markClaimed(c.policyId);
-            emit ClaimApproved(claimId, c.yesVotes, c.noVotes);
-        } else {
-            c.status = ClaimStatus.REJECTED;
-            emit ClaimRejected(claimId, c.yesVotes, c.noVotes);
-        }
+    if (c.status != ClaimStatus.PENDING || block.timestamp < c.votingEndsAt) {
+        revert IClaimsGovernor__CannotFinalize(claimId);
     }
+
+    uint256 totalSupply = i_shieldToken.getPastTotalSupply(c.snapshotBlock);
+    bool approved = ClaimValidator.isClaimApproved(
+        c.yesVotes,
+        c.noVotes,
+        totalSupply
+    );
+
+    if (approved) {
+        c.status = ClaimStatus.APPROVED;
+        i_policyEngine.markClaimed(c.policyId);
+        emit ClaimApproved(claimId, c.yesVotes, c.noVotes);
+    } else {
+        c.status = ClaimStatus.REJECTED;
+        emit ClaimRejected(claimId, c.yesVotes, c.noVotes);
+    }
+}
 
     /**
      * @notice Unilaterally enforces a structural emergency veto to cancel invalid or fraudulent claims.
