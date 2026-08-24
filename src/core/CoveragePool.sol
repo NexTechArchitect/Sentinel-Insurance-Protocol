@@ -199,7 +199,7 @@ contract CoveragePool is
         address account,
         uint256 assets,
         uint256 shares
-    ) internal override nonReentrant whenNotPaused {
+    ) internal override whenNotPaused {
         uint256 freeLiq = totalAssets() - s_totalLocked;
         if (assets > freeLiq) {
             revert ICoveragePool__InsufficientFreeLiquidity(assets, freeLiq);
