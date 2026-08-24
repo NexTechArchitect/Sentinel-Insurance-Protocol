@@ -146,7 +146,7 @@ Sentinel-Insurance-Protocol/
 ##  🛠️ Local Setup & Automation
 
 ### 1. Smart Contracts (Foundry)
-
+ 
 ```bash
 git clone [https://github.com/NexTechArchitect/Sentinel-Insurance-Protocol.git](https://github.com/NexTechArchitect/Sentinel-Insurance-Protocol.git)
 cd Sentinel-Insurance-Protocol
