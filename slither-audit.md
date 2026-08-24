@@ -1,5 +1,5 @@
 
-# 🛡️ SentinelShield Security Audit Report
+# 🛡️ SentinelShield Security Audit Report 
 
 **Audit Engine:** Slither v0.10.x Static Analyzer
 
