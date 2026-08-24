@@ -176,18 +176,18 @@ contract CoveragePool is
      * @dev Internal hook invoked post-deposit. Approves and supplies assets directly to Aave V3.
      */
     function _deposit(
-        address caller,
-        address receiver,
-        uint256 assets,
-        uint256 shares
-    ) internal override nonReentrant whenNotPaused {
-        super._deposit(caller, receiver, assets, shares);
+    address caller,
+    address receiver,
+    uint256 assets,
+    uint256 shares
+) internal override whenNotPaused {
+    super._deposit(caller, receiver, assets, shares);
 
-        IERC20(asset()).forceApprove(address(i_aavePool), assets);
-        i_aavePool.supply(asset(), assets, address(this), 0);
+    IERC20(asset()).forceApprove(address(i_aavePool), assets);
+    i_aavePool.supply(asset(), assets, address(this), 0);
 
-        emit LiquidityDeposited(receiver, assets, shares);
-    }
+    emit LiquidityDeposited(receiver, assets, shares);
+}
 
     /**
      * @dev Internal hook invoked pre-withdrawal. Validates free liquidity and pulls assets from Aave V3.
