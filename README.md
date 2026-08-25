@@ -133,8 +133,8 @@ Sentinel-Insurance-Protocol/
 
 ## 🛡️ Security
 
-- Slither static analysis — 0 high severity flags
-- Manual review conducted — 3 issues identified 
+- Slither static analysis - 0 high severity flags
+- Manual review conducted - 3 issues identified 
   and remediated:
   - ERC-4626 internal hook reentrancy guard conflict
   - Governance snapshot supply inconsistency  
