@@ -5,7 +5,7 @@
  
 # Decentralized On-Chain Insurance Infrastructure
 ### Base Mainnet · ERC-4626 Yield Routing · DAO Adjudication · Next.js 3D Engine 
-<br>
+<br>                
  
 [![Live App](https://img.shields.io/badge/Production-Live_App-22c55e?style=flat-square&logo=vercel)](https://sentinel-insurance-protocol.vercel.app/)
 [![Network](https://img.shields.io/badge/Network-Base_Mainnet-0052FF?style=flat-square&logo=base)](https://basescan.org/)
